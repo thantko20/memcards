@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
 import { useFormState, useFormStatus } from "react-dom";
 
 const Submit = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Submitting" : "Submit"}
+    <Button type="submit" isLoading={pending}>
+      Submit
     </Button>
   );
 };

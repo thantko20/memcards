@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/app/components/ui/input";
 import { db } from "@/lib/db";
 import { decks } from "@/lib/db/schema";
 import { revalidatePath } from "next/cache";
