@@ -1,11 +1,12 @@
 import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-// export const users = pgTable("users", {
-//   id: uuid("id").primaryKey().defaultRandom(),
-//   name: varchar("name", { length: 100 }).notNull(),
-//   username: varchar("username", { length: 100 }).notNull().unique(),
-//   password: text("password")
-// });
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 100 }).notNull(),
+  username: varchar("username", { length: 100 }).notNull().unique(),
+  email: varchar("email", { length: 100 }).notNull().unique(),
+  password: text("password")
+});
 
 export const decks = pgTable("decks", {
   id: uuid("id").primaryKey().defaultRandom(),
