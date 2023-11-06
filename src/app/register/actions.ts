@@ -1,12 +1,24 @@
-import { z } from "zod";
+"use server";
 
-export const register = (prevState: any, formData: FormData) => {
-  const result = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-    name: z.string().min(1),
-    username: z.string().min(1)
-  });
+import { AuthService } from "@/core/auth/auth.service";
+import { RegisterFormValues, RegisterSchema } from "@/validations/auth";
 
-  if (!result) return prevState;
+export const registerAction = async (
+  _prevState: { message: string } | null,
+  formData: RegisterFormValues
+) => {
+  try {
+    const result = RegisterSchema.safeParse(formData);
+
+    if (!result.success) return { message: "Validation Errors" };
+
+    await AuthService.register(result.data);
+
+    return null;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+    return { message: "Unknown Error" };
+  }
 };
