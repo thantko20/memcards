@@ -15,20 +15,11 @@ import {
   Form
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { signInWithCredentials } from "@/app/actions/auth.actions";
-
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button className="w-full mt-4" isLoading={pending}>
-      Login
-    </Button>
-  );
-};
+import { signInWithCredentialsAction } from "@/app/actions/auth.actions";
+import { LoginButton } from "./buttons";
 
 export const LoginForm = () => {
-  const [state, action] = useFormState(signInWithCredentials, null);
+  const [state, action] = useFormState(signInWithCredentialsAction, null);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -83,7 +74,7 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          <SubmitButton />
+          <LoginButton />
         </form>
       </Form>
     </div>
