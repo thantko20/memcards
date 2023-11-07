@@ -15,6 +15,10 @@ export const authConfig = {
         return Response.redirect(new URL("/", nextUrl));
       }
 
+      if (isOnAuthPages) {
+        return true;
+      }
+
       return isLoggedIn;
     }
   }

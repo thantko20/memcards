@@ -23,10 +23,12 @@ export const registerAction = async (
     await AuthService.register(result.data);
     redirect("/login");
   } catch (error) {
+    if (isNextRedirectError(error)) throw error;
     if (error instanceof Error) {
       return { message: error.message };
     }
-    throw error;
+    console.log(error);
+    return { message: "Unknown error" };
   }
 };
 
@@ -39,14 +41,14 @@ export const signInWithCredentialsAction = async (
     if (!result.success) return { message: "Validation Errors" };
     await signIn("credentials", result.data);
   } catch (error) {
-    if ((error as Error).message.includes("CredentialsSignin")) {
-      return { message: "Invalid Credentials" };
-    }
     if (isNextRedirectError(error)) {
       throw error;
     }
+    if ((error as Error).message.includes("CredentialsSignin")) {
+      return { message: "Invalid Credentials" };
+    }
     console.log(error);
-    return { message: "Unknow error" };
+    return { message: "Unknown error" };
   }
 };
 
