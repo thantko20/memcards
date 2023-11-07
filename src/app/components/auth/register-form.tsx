@@ -26,7 +26,7 @@ const SubmitButton = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" isLoading={pending}>
+    <Button type="submit" isLoading={pending} className="mt-8 w-full">
       Register
     </Button>
   );
@@ -38,7 +38,7 @@ export const RegisterForm = () => {
     resolver: zodResolver(RegisterSchema)
   });
   return (
-    <div className="max-w-md mx-auto mt-8 space-y-6">
+    <div className="max-w-md mx-auto space-y-2">
       {state?.message ? (
         <Alert variant="destructive">
           <AlertDescription>{state?.message}</AlertDescription>
@@ -46,12 +46,12 @@ export const RegisterForm = () => {
       ) : null}
       <Form {...form}>
         <form
-          className="flex flex-col gap-6"
           action={async () => {
             const valid = await form.trigger();
             if (!valid) return;
             action(form.getValues());
           }}
+          className="space-y-4"
         >
           <FormField
             control={form.control}
