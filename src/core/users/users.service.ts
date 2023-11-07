@@ -17,14 +17,14 @@ export const getUserByUsername = async (username: string) => {
 };
 
 export const createUser = async (user: InferInsertModel<typeof users>) => {
-  const existingUsername = await db
+  const [existingUsername] = await db
     .select()
     .from(users)
     .where(eq(users.username, user.username));
   if (existingUsername) {
     throw new Error(`Username ${user.username} is already in use.`);
   }
-  const existingEmail = await db
+  const [existingEmail] = await db
     .select()
     .from(users)
     .where(eq(users.email, user.email));

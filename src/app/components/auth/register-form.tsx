@@ -1,7 +1,7 @@
 "use client";
 
 import { registerAction } from "@/app/register/actions";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -35,8 +35,21 @@ const SubmitButton = () => {
 export const RegisterForm = () => {
   const [state, action] = useFormState(registerAction, null);
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterSchema)
+    resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      email: "",
+      name: "",
+      password: "",
+      username: ""
+    }
   });
+
+  useEffect(() => {
+    if (state === null) {
+      form.reset();
+    }
+  }, [state, form]);
+
   return (
     <div className="max-w-md mx-auto space-y-2">
       {state?.message ? (
@@ -60,7 +73,11 @@ export const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johhndoe@mail.com" {...field} />
+                  <Input
+                    placeholder="johhndoe@mail.com"
+                    {...field}
+                    autoSave="off"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -73,7 +90,7 @@ export const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} autoComplete="off" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -86,7 +103,7 @@ export const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input placeholder="John Doe" {...field} autoComplete="off" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,7 +116,7 @@ export const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" {...field} autoComplete="off" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
