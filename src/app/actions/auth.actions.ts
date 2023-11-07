@@ -25,7 +25,7 @@ export const registerAction = async (
     if (error instanceof Error) {
       return { message: error.message };
     }
-    return { message: "Unknown Error" };
+    throw error;
   }
 };
 
