@@ -6,7 +6,12 @@ export const authConfig: NextAuthConfig = {
     signIn: "/login"
   },
   callbacks: {
-    authorized() {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      console.log(auth?.user);
+      if (isLoggedIn && nextUrl.pathname !== "/") {
+        return Response.redirect(new URL("/", nextUrl));
+      }
       return true;
     }
   }

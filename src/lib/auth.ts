@@ -4,7 +4,7 @@ import { authConfig } from "../../auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { AuthService } from "@/core/auth/auth.service";
 
-export const { signIn, signOut } = NextAuth({
+export const { signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -17,7 +17,8 @@ export const { signIn, signOut } = NextAuth({
           .safeParse(credentials);
 
         if (result.success) {
-          return await AuthService.loginWithCredentials(result.data);
+          const user = await AuthService.loginWithCredentials(result.data);
+          return user;
         }
         return null;
       }

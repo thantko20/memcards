@@ -1,54 +1,41 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Alert, AlertDescription } from "../ui/alert";
 import { useForm } from "react-hook-form";
+import { LoginFormValues, LoginSchema } from "@/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterFormValues, RegisterSchema } from "@/validations/auth";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormControl,
+  FormMessage,
+  Form
 } from "../ui/form";
-import { registerAction } from "@/app/actions/auth.actions";
-
-const FieldWrapper = ({ children }: { children: ReactNode }) => {
-  return <div className="flex flex-col gap-2">{children}</div>;
-};
+import { Input } from "../ui/input";
+import { signInWithCredentials } from "@/app/actions/auth.actions";
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" isLoading={pending} className="mt-8 w-full">
-      Register
+    <Button className="w-full mt-4" isLoading={pending}>
+      Login
     </Button>
   );
 };
 
-export const RegisterForm = () => {
-  const [state, action] = useFormState(registerAction, null);
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterSchema),
+export const LoginForm = () => {
+  const [state, action] = useFormState(signInWithCredentials, null);
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
-      name: "",
-      password: "",
-      username: ""
+      password: ""
     }
   });
-
-  useEffect(() => {
-    if (state === null) {
-      form.reset();
-    }
-  }, [state, form]);
 
   return (
     <div className="max-w-md mx-auto space-y-2">
@@ -78,32 +65,6 @@ export const RegisterForm = () => {
                     {...field}
                     autoSave="off"
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input {...field} autoComplete="off" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} autoComplete="off" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
