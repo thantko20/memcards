@@ -2,6 +2,7 @@
 
 import { AuthService } from "@/core/auth/auth.service";
 import { signIn, signOut } from "@/lib/auth";
+import { isNextRedirectError } from "@/utils";
 import {
   LoginFormValues,
   LoginSchema,
@@ -41,7 +42,11 @@ export const signInWithCredentialsAction = async (
     if ((error as Error).message.includes("CredentialsSignin")) {
       return { message: "Invalid Credentials" };
     }
-    throw error;
+    if (isNextRedirectError(error)) {
+      throw error;
+    }
+    console.log(error);
+    return { message: "Unknow error" };
   }
 };
 
