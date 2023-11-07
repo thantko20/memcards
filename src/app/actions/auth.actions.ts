@@ -39,7 +39,7 @@ export const signInWithCredentialsAction = async (
   try {
     const result = LoginSchema.safeParse(formData);
     if (!result.success) return { message: "Validation Errors" };
-    await signIn("credentials", result.data);
+    await signIn("credentials", { ...result.data, redirectTo: "/demo" });
   } catch (error) {
     if (isNextRedirectError(error)) {
       throw error;

@@ -12,7 +12,7 @@ export const authConfig = {
         nextUrl.pathname === "/login" || nextUrl.pathname === "/register";
 
       if (isLoggedIn && isOnAuthPages) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL("/demo", nextUrl));
       }
 
       if (isOnAuthPages) {
