@@ -7,12 +7,17 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Link } from "@/components/ui/link";
+import { Lusitana } from "next/font/google";
+
+const lusitana = Lusitana({ weight: "700", subsets: ["latin"] });
 
 export default async function Page() {
   return (
     <div className="min-w-[400px]">
-      <h1 className="font-bold text-4xl">Memcards</h1>
-      <Card className="mt-4">
+      <h1 className={`font-bold text-4xl text-center ${lusitana.className}`}>
+        Memcards
+      </h1>
+      <Card className="mt-6">
         <CardHeader>
           <CardTitle>Login</CardTitle>
         </CardHeader>
