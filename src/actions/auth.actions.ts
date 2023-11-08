@@ -8,7 +8,7 @@ import {
   LoginSchema,
   RegisterFormValues,
   RegisterSchema
-} from "@/validations/auth";
+} from "@/core/auth/auth.validation";
 import { redirect } from "next/navigation";
 
 export const registerAction = async (

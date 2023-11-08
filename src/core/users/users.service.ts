@@ -42,3 +42,14 @@ export const createUser = async (user: InferInsertModel<typeof users>) => {
     .returning();
   return newUser;
 };
+
+export const getUserById = async (id: string) => {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, id),
+    columns: {
+      password: false
+    }
+  });
+
+  return user;
+};

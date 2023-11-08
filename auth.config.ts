@@ -7,6 +7,7 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
+      console.log(auth?.user);
       const isLoggedIn = !!auth?.user;
       const isOnAuthPages =
         nextUrl.pathname === "/login" || nextUrl.pathname === "/register";
@@ -20,6 +21,12 @@ export const authConfig = {
       }
 
       return isLoggedIn;
+    },
+    async session({ session, token }) {
+      if (token.sub && session.user) {
+        session = { ...session, user: { ...session.user, id: token.sub } };
+      }
+      return session;
     }
   }
 } satisfies NextAuthConfig;

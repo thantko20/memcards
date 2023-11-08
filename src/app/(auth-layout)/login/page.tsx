@@ -1,6 +1,12 @@
-import { LoginForm } from "@/app/components/auth";
-import { buttonVariants } from "@/app/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/app/components/ui/card";
+import { LoginForm } from "@/components/auth";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { cn } from "@/utils/ui";
 import Link from "next/link";
 
@@ -8,8 +14,11 @@ export default async function Page() {
   return (
     <div className="min-w-[400px]">
       <h1 className="font-bold text-4xl">Memcards</h1>
-      <Card className="mt-8">
-        <CardContent className="p-6">
+      <Card className="">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+        </CardHeader>
+        <CardContent>
           <LoginForm />
         </CardContent>
         <CardFooter>

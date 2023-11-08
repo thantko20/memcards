@@ -1,4 +1,4 @@
-import { SignOut } from "@/app/components/auth/sign-out";
+import { SignOut } from "@/components/auth/sign-out";
 
 export default function Page() {
   return (

@@ -1,32 +1,53 @@
 "use client";
 
+import { ReactNode, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
+import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useForm } from "react-hook-form";
-import { LoginFormValues, LoginSchema } from "@/validations/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertDescription } from "../ui/alert";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  RegisterFormValues,
+  RegisterSchema
+} from "@/core/auth/auth.validation";
+import {
+  Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
-  FormMessage,
-  Form
+  FormMessage
 } from "../ui/form";
-import { Input } from "../ui/input";
-import { signInWithCredentialsAction } from "@/app/actions/auth.actions";
-import { LoginButton } from "./buttons";
+import { registerAction } from "@/actions/auth.actions";
 
-export const LoginForm = () => {
-  const [state, action] = useFormState(signInWithCredentialsAction, null);
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginSchema),
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" isLoading={pending} className="mt-8 w-full">
+      Register
+    </Button>
+  );
+};
+
+export const RegisterForm = () => {
+  const [state, action] = useFormState(registerAction, null);
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
-      password: ""
+      name: "",
+      password: "",
+      username: ""
     }
   });
+
+  useEffect(() => {
+    if (state === null) {
+      form.reset();
+    }
+  }, [state, form]);
 
   return (
     <div className="max-w-md mx-auto space-y-2">
@@ -63,6 +84,32 @@ export const LoginForm = () => {
           />
           <FormField
             control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input {...field} autoComplete="off" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} autoComplete="off" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem>
@@ -74,7 +121,7 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
-          <LoginButton />
+          <SubmitButton />
         </form>
       </Form>
     </div>

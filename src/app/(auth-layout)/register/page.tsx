@@ -1,6 +1,6 @@
-import { RegisterForm } from "@/app/components/auth";
-import { Button, buttonVariants } from "@/app/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/app/components/ui/card";
+import { RegisterForm } from "@/components/auth";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/utils/ui";
 import { Metadata } from "next";
 import Link from "next/link";

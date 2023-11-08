@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 
 import { UserService } from "../users/users.service";
-import { RegisterFormValues } from "@/validations/auth";
+import { RegisterFormValues } from "@/core/auth/auth.validation";
 
 export * as AuthService from "./auth.service";
 

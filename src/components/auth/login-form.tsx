@@ -1,50 +1,31 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Alert, AlertDescription } from "../ui/alert";
 import { useForm } from "react-hook-form";
+import { LoginFormValues, LoginSchema } from "@/core/auth/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterFormValues, RegisterSchema } from "@/validations/auth";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormControl,
+  FormMessage,
+  Form
 } from "../ui/form";
-import { registerAction } from "@/app/actions/auth.actions";
+import { Input } from "../ui/input";
+import { signInWithCredentialsAction } from "@/actions/auth.actions";
+import { LoginButton } from "./buttons";
 
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit" isLoading={pending} className="mt-8 w-full">
-      Register
-    </Button>
-  );
-};
-
-export const RegisterForm = () => {
-  const [state, action] = useFormState(registerAction, null);
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterSchema),
+export const LoginForm = () => {
+  const [state, action] = useFormState(signInWithCredentialsAction, null);
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
-      name: "",
-      password: "",
-      username: ""
+      password: ""
     }
   });
-
-  useEffect(() => {
-    if (state === null) {
-      form.reset();
-    }
-  }, [state, form]);
 
   return (
     <div className="max-w-md mx-auto space-y-2">
@@ -81,32 +62,6 @@ export const RegisterForm = () => {
           />
           <FormField
             control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input {...field} autoComplete="off" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} autoComplete="off" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem>
@@ -118,7 +73,7 @@ export const RegisterForm = () => {
               </FormItem>
             )}
           />
-          <SubmitButton />
+          <LoginButton />
         </form>
       </Form>
     </div>
