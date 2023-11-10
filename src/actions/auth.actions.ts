@@ -1,7 +1,6 @@
 "use server";
 
 import { AuthService } from "@/core/auth/auth.service";
-import { signIn, signOut } from "@/lib/auth";
 import { isNextRedirectError } from "@/utils";
 import {
   LoginFormValues,
@@ -10,6 +9,8 @@ import {
   RegisterSchema
 } from "@/core/auth/auth.validation";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/lucia";
+import * as context from "next/headers";
 
 export const registerAction = async (
   _prevState: { message: string } | null | undefined,
@@ -20,15 +21,13 @@ export const registerAction = async (
 
     if (!result.success) return { message: "Validation Errors" };
 
-    await AuthService.register(result.data);
+    const { session } = await AuthService.register(result.data);
+    const authRequest = auth.handleRequest("POST", context);
+    authRequest.setSession(session);
     redirect("/login");
   } catch (error) {
     if (isNextRedirectError(error)) throw error;
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    console.log(error);
-    return { message: "Unknown error" };
+    return { message: (error as Error).message };
   }
 };
 
@@ -39,19 +38,25 @@ export const signInWithCredentialsAction = async (
   try {
     const result = LoginSchema.safeParse(formData);
     if (!result.success) return { message: "Validation Errors" };
-    await signIn("credentials", { ...result.data, redirectTo: "/demo" });
+    const { session } = await AuthService.loginWithCredentials(result.data);
+    const authRequest = auth.handleRequest("POST", context);
+    authRequest.setSession(session);
+    redirect("/");
   } catch (error) {
     if (isNextRedirectError(error)) {
       throw error;
     }
-    if ((error as Error).message.includes("CredentialsSignin")) {
-      return { message: "Invalid Credentials" };
-    }
-    console.log(error);
-    return { message: "Unknown error" };
+    return { message: (error as Error).message };
   }
 };
 
 export const signOutAction = async () => {
-  await signOut();
+  const authRequest = auth.handleRequest("POST", context);
+  const session = await authRequest.validate();
+  if (!session) {
+    throw new Error("Cannot sign out");
+  }
+  await auth.invalidateSession(session.sessionId);
+  authRequest.setSession(null);
+  redirect("/login");
 };

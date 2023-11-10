@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { InferInsertModel, eq, or } from "drizzle-orm";
+import { InferInsertModel, eq, ilike, or } from "drizzle-orm";
 import * as bcrypt from "bcrypt";
 
 export * as UserService from "./users.service";
@@ -12,7 +12,7 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserByUsername = async (username: string) => {
   return db.query.users.findFirst({
-    where: eq(users.username, username)
+    where: ilike(users.username, username)
   });
 };
 

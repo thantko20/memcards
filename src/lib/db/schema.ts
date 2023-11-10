@@ -1,11 +1,38 @@
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+  bigint
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   username: varchar("username", { length: 100 }).notNull().unique(),
-  email: varchar("email", { length: 100 }).notNull().unique(),
-  password: text("password")
+  email: varchar("email", { length: 100 }).notNull().unique()
+});
+
+export const session = pgTable("user_sessions", {
+  id: varchar("id", { length: 128 }).primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  activeExpires: bigint("active_expires", {
+    mode: "number"
+  }).notNull(),
+  idleExpires: bigint("idle_expires", {
+    mode: "number"
+  }).notNull()
+});
+
+export const key = pgTable("user_keys", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id),
+  hashedPassword: varchar("hashed_password", { length: 255 })
 });
 
 export const decks = pgTable("decks", {
