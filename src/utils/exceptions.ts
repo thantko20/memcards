@@ -16,6 +16,12 @@ export class BadRequestException extends BaseException {
   }
 }
 
+export class UnauthenticatedException extends BaseException {
+  constructor(message = "Unauthenticated Exception") {
+    super(message, 401);
+  }
+}
+
 export class ForbiddenException extends BaseException {
   constructor(message = "Forbidden") {
     super(message, 403);

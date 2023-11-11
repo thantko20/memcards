@@ -7,6 +7,7 @@ import { auth } from "@/lib/lucia";
 import { InferSelectModel } from "drizzle-orm";
 import { users } from "@/lib/db/schema";
 import { LuciaError } from "lucia";
+import { BadRequestException } from "@/utils";
 
 export * as AuthService from "./auth.service";
 
@@ -18,23 +19,21 @@ export const loginWithCredentials = async ({
   password: string;
 }) => {
   const user = await UserService.getUserByEmail(email);
-  if (!user) throw new Error("User does not exist");
+  if (!user) throw new BadRequestException("User does not exist");
 
   try {
     const key = await auth.useKey("email", email, password);
     const user: InferSelectModel<typeof users> = await auth.getUser(key.userId);
-    console.log(user);
     const session = await auth.createSession({
       userId: key.userId,
       attributes: {}
     });
     return { user, session };
   } catch (error) {
-    console.log(error);
     if (error instanceof LuciaError) {
-      throw new Error("Invalid credentials");
+      throw new BadRequestException("Invalid credentials");
     }
-    throw new Error("Unknown error");
+    throw error;
   }
 };
 
