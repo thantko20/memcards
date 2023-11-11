@@ -23,6 +23,7 @@ export const loginWithCredentials = async ({
   try {
     const key = await auth.useKey("email", email, password);
     const user: InferSelectModel<typeof users> = await auth.getUser(key.userId);
+    console.log(user);
     const session = await auth.createSession({
       userId: key.userId,
       attributes: {}
