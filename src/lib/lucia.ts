@@ -4,6 +4,7 @@ import { pg } from "@lucia-auth/adapter-postgresql";
 import { pool } from "./db";
 import { InferSelectModel } from "drizzle-orm";
 import { users } from "./db/schema";
+import { google } from "@lucia-auth/oauth/providers";
 
 export const auth = lucia({
   env: "DEV",
@@ -24,6 +25,13 @@ export const auth = lucia({
       name: data.name
     };
   }
+});
+
+export const googleAuth = google(auth, {
+  clientId: process.env.GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  redirectUri: "http://localhost:3000/api/auth/google/callback",
+  scope: ["email"]
 });
 
 export type Auth = typeof auth;

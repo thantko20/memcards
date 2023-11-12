@@ -19,7 +19,7 @@ export const loginWithCredentials = async ({
   password: string;
 }) => {
   const user = await UserService.getUserByEmail(email);
-  if (!user) throw new BadRequestException("User does not exist");
+  if (!user) throw new BadRequestException("Invalid credentials");
 
   try {
     const key = await auth.useKey("email", email, password);

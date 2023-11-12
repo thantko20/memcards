@@ -1,7 +1,9 @@
 import { LoginForm } from "@/components/auth";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle
@@ -13,24 +15,11 @@ const lusitana = Lusitana({ weight: "700", subsets: ["latin"] });
 
 export default async function Page() {
   return (
-    <div className="min-w-[400px]">
+    <div>
       <h1 className={`font-bold text-4xl text-center ${lusitana.className}`}>
         Memcards
       </h1>
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LoginForm />
-        </CardContent>
-        <CardFooter>
-          <p>Do not have an account?</p>{" "}
-          <Link href="/register" className="ml-2">
-            Register
-          </Link>
-        </CardFooter>
-      </Card>
+      <LoginForm />
     </div>
   );
 }

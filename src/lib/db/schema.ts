@@ -10,7 +10,7 @@ import {
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-  username: varchar("username", { length: 100 }).notNull().unique(),
+  username: varchar("username", { length: 100 }).unique(),
   email: varchar("email", { length: 100 }).notNull().unique()
 });
 

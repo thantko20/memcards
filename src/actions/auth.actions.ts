@@ -1,11 +1,7 @@
 "use server";
 
 import { AuthService } from "@/core/auth/auth.service";
-import {
-  BadRequestException,
-  UnauthenticatedException,
-  isNextRedirectError
-} from "@/utils";
+import { BadRequestException, UnauthenticatedException } from "@/utils";
 import {
   LoginFormValues,
   LoginSchema,
@@ -63,10 +59,10 @@ export const signOutAction = async () => {
   try {
     const authRequest = auth.handleRequest("POST", context);
     const session = await authRequest.validate();
-    if (!session) {
-      throw new UnauthenticatedException("You are not authenticated");
-    }
-    await auth.invalidateSession(session.sessionId);
+    // if (!session) {
+    //   throw new UnauthenticatedException("You are not authenticated");
+    // }
+    // await auth.invalidateSession(session?.sessionId ?? "");
     authRequest.setSession(null);
     redirect("/login");
   } catch (error) {

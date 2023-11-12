@@ -11,6 +11,9 @@ dependencies:
   '@lucia-auth/adapter-postgresql':
     specifier: ^2.0.2
     version: 2.0.2(lucia@2.7.3)(pg@8.11.3)(postgres@3.4.3)
+  '@lucia-auth/oauth':
+    specifier: ^3.5.0
+    version: 3.5.0(lucia@2.7.3)
   '@radix-ui/react-dropdown-menu':
     specifier: ^2.0.6
     version: 2.0.6(@types/react-dom@18.2.14)(@types/react@18.2.35)(react-dom@18.2.0)(react@18.2.0)
@@ -501,6 +504,14 @@ packages:
       lucia: 2.7.3
       pg: 8.11.3
       postgres: 3.4.3
+    dev: false
+
+  /@lucia-auth/oauth@3.5.0(lucia@2.7.3):
+    resolution: {integrity: sha512-JSwAMVwlDJtbvfcJV1nbkv41OD830pgICrx8zFT71SYd5I1MnEQ+GqMTXBGRyxzc5XlLatT8ZS1Jt0k81487xg==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
+      lucia: 2.7.3
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:

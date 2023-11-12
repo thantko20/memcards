@@ -16,7 +16,7 @@ export const LoginButton = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button className="w-full mt-4" isLoading={pending}>
+    <Button className="w-full mt-4" isLoading={pending} form="login-form">
       Login
     </Button>
   );
