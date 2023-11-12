@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/lucia";
 import * as context from "next/headers";
 import { handleErrorsInServerAction } from "@/utils/errorHandlers";
+import { UserService } from "@/core/users/users.service";
 
 export const registerAction = async (
   _prevState: { message: string } | null | undefined,
@@ -49,7 +50,7 @@ export const signInWithCredentialsAction = async (
     const { session } = await AuthService.loginWithCredentials(result.data);
     const authRequest = auth.handleRequest("POST", context);
     authRequest.setSession(session);
-    redirect("/");
+    redirect("/app");
   } catch (error) {
     return handleErrorsInServerAction(error);
   }
@@ -59,10 +60,10 @@ export const signOutAction = async () => {
   try {
     const authRequest = auth.handleRequest("POST", context);
     const session = await authRequest.validate();
-    // if (!session) {
-    //   throw new UnauthenticatedException("You are not authenticated");
-    // }
-    // await auth.invalidateSession(session?.sessionId ?? "");
+    if (!session) {
+      throw new UnauthenticatedException("You are not authenticated");
+    }
+    await auth.invalidateSession(session?.sessionId ?? "");
     authRequest.setSession(null);
     redirect("/login");
   } catch (error) {

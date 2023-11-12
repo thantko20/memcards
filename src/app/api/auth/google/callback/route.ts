@@ -18,6 +18,7 @@ export const GET = async (request: NextRequest) => {
   try {
     const { getExistingUser, googleUser, createUser } =
       await googleAuth.validateCallback(code);
+    console.log(googleUser);
     let user: InferSelectModel<typeof users>;
     const existingUser = await getExistingUser();
     if (existingUser) {
@@ -27,7 +28,8 @@ export const GET = async (request: NextRequest) => {
         userId: crypto.randomUUID(),
         attributes: {
           email: googleUser.email,
-          name: googleUser.name
+          name: googleUser.name,
+          avatar: googleUser.picture
         }
       });
     }
@@ -44,7 +46,7 @@ export const GET = async (request: NextRequest) => {
     return new Response(null, {
       status: 302,
       headers: {
-        Location: "/"
+        Location: "/app"
       }
     });
   } catch (error) {

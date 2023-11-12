@@ -22,7 +22,14 @@ export const auth = lucia({
       id: data.id,
       username: data.username,
       email: data.email,
-      name: data.name
+      name: data.name,
+      avatar: data.avatar
+    };
+  },
+  getSessionAttributes: (data) => {
+    return {
+      sessionId: data.id,
+      userId: data.userId
     };
   }
 });

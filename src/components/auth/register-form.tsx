@@ -20,7 +20,6 @@ import {
   FormMessage
 } from "../ui/form";
 import { registerAction } from "@/actions/auth.actions";
-import { useSearchParams } from "next/navigation";
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -68,30 +67,16 @@ export const RegisterForm = ({ email }: { email?: string }) => {
       >
         <FormField
           control={form.control}
-          name="email"
-          disabled
+          name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter email" {...field} autoSave="off" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input
-                  type="password"
+                  type="text"
                   {...field}
                   autoComplete="off"
-                  placeholder="Enter password"
+                  placeholder="Enter username"
                 />
               </FormControl>
               <FormMessage />
@@ -118,16 +103,16 @@ export const RegisterForm = ({ email }: { email?: string }) => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
-                  type="text"
+                  type="password"
                   {...field}
                   autoComplete="off"
-                  placeholder="Enter username"
+                  placeholder="Enter password"
                 />
               </FormControl>
               <FormMessage />

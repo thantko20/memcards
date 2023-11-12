@@ -4,14 +4,24 @@ import {
   timestamp,
   uuid,
   varchar,
-  bigint
+  bigint,
+  pgEnum
 } from "drizzle-orm/pg-core";
+
+export const accountCompletenessEnum = pgEnum("account_completeness", [
+  "incomplete",
+  "completed"
+]);
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   username: varchar("username", { length: 100 }).unique(),
-  email: varchar("email", { length: 100 }).notNull().unique()
+  email: varchar("email", { length: 100 }).notNull().unique(),
+  avatar: varchar("avatar", { length: 300 }),
+  accountCompleteness: accountCompletenessEnum("account_completeness").default(
+    "incomplete"
+  )
 });
 
 export const session = pgTable("user_sessions", {
