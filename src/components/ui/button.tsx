@@ -39,6 +39,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
+  leftSection?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -51,6 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       disabled,
       isLoading,
+      leftSection = null,
       ...props
     },
     ref
@@ -59,12 +61,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const compDisabled = disabled || isLoading;
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, className }), "gap-4")}
         ref={ref}
         disabled={compDisabled}
         {...props}
       >
-        {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-4" /> : null}
+        {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : leftSection}
         {children}
       </Comp>
     );

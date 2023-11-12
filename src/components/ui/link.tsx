@@ -12,7 +12,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
         ref={ref}
         className={cn(
           buttonVariants({ variant: "link" }),
-          "p-0 text-base",
+          "p-0 text-base h-max",
           className
         )}
         {...props}

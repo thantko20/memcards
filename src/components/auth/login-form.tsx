@@ -26,6 +26,7 @@ import {
   CardFooter
 } from "../ui/card";
 import { Link } from "../ui/link";
+import Image from "next/image";
 
 export const LoginForm = () => {
   const [state, action] = useFormState(signInWithCredentialsAction, null);
@@ -42,23 +43,30 @@ export const LoginForm = () => {
       <Card className="mt-6">
         <CardHeader>
           <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Log in with email and password or via Google
-          </CardDescription>
+          <CardDescription>Log in with email or via Google</CardDescription>
         </CardHeader>
         <CardContent>
           <form action="/api/auth/google">
             <Button
               type="submit"
-              className="w-full bg-red-500 mb-2 hover:bg-red-600"
+              variant="outline"
+              className="w-full"
+              leftSection={
+                <Image
+                  src="/images/google_logo.png"
+                  width={16}
+                  height={16}
+                  alt="google logo"
+                />
+              }
             >
               Continue with Google
             </Button>
           </form>
-          <div className="flex items-center gap-2">
-            <div className="h-[1px] bg-gray-300 dark:bg-gray-700 w-full" />
+          <div className="flex items-center gap-2 my-4">
+            <div className="h-[0.75px] bg-gray-300 dark:bg-gray-700 w-full" />
             <span className="text-sm text-gray-400">OR</span>
-            <div className="h-[1px] bg-gray-300 dark:bg-gray-700 w-full" />
+            <div className="h-[0.75px] bg-gray-300 dark:bg-gray-700 w-full" />
           </div>
           <Form {...form}>
             {state?.message ? (
@@ -83,7 +91,7 @@ export const LoginForm = () => {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="johhndoe@mail.com"
+                        placeholder="Enter email"
                         {...field}
                         autoSave="off"
                       />
@@ -99,26 +107,32 @@ export const LoginForm = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} autoComplete="off" />
+                      <Input
+                        type="password"
+                        {...field}
+                        autoComplete="off"
+                        placeholder="Enter password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div>
-                <p>
-                  Do not have an account?
-                  <Link href="/register" className="ml-2">
-                    Register
-                  </Link>
-                </p>
-              </div>
               <LoginButton />
             </form>
           </Form>
         </CardContent>
-        <CardFooter></CardFooter>
       </Card>
+      <div>
+        <p className="text-sm text-center mt-4">
+          <span className="text-gray-600 dark:text-gray-400">
+            Do not have an account?
+          </span>
+          <Link href="/register" className="ml-2 text-sm">
+            Register
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };
