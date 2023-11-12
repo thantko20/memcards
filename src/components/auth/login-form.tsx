@@ -15,7 +15,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { signInWithCredentialsAction } from "@/actions/auth.actions";
-import { LoginButton } from "./buttons";
+import { GoogleSignInButton, LoginButton } from "./buttons";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -46,23 +46,7 @@ export const LoginForm = () => {
           <CardDescription>Log in with email or via Google</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action="/api/auth/google">
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full"
-              leftSection={
-                <Image
-                  src="/images/google_logo.png"
-                  width={16}
-                  height={16}
-                  alt="google logo"
-                />
-              }
-            >
-              Continue with Google
-            </Button>
-          </form>
+          <GoogleSignInButton method="signin" />
           <div className="flex items-center gap-2 my-4">
             <div className="h-[0.75px] bg-gray-300 dark:bg-gray-700 w-full" />
             <span className="text-sm text-gray-400">OR</span>

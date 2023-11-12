@@ -1,36 +1,32 @@
-import { RegisterForm } from "@/components/auth";
+import { CheckEmailForm, RegisterForm } from "@/components/auth";
+import { GoogleSignInButton } from "@/components/auth/buttons";
+import { RegisterWrapper } from "@/components/auth/register-wrapper";
 import {
   Card,
   CardContent,
-  CardFooter,
+  CardDescription,
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
 import { Link } from "@/components/ui/link";
 import { Metadata } from "next";
+import { Lusitana } from "next/font/google";
+import { cookies } from "next/headers";
+
+const lusitana = Lusitana({ weight: "700", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Registration"
 };
 
 export default function Page() {
+  const email = cookies().get("email")?.value;
   return (
-    <div className="min-w-[400px]">
-      <h1 className="font-bold text-4xl">Memcards</h1>
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle>Registration</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <RegisterForm />
-        </CardContent>
-        <CardFooter>
-          <p>Already have an account?</p>{" "}
-          <Link href="/login" className="ml-2">
-            Login
-          </Link>
-        </CardFooter>
-      </Card>
+    <div>
+      <h1 className={`font-bold text-4xl text-center ${lusitana.className}`}>
+        Memcards
+      </h1>
+      <RegisterWrapper />
     </div>
   );
 }

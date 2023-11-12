@@ -69,3 +69,18 @@ export const signOutAction = async () => {
     handleErrorsInServerAction(error);
   }
 };
+
+export const checkIfEmailExistsAction = async (
+  _prevState: boolean | null | undefined,
+  theEmail: string
+) => {
+  try {
+    const { emailExists } = await AuthService.checkIfEmailExists(theEmail);
+    if (emailExists) {
+      return true;
+    }
+    redirect(`/register?email=${theEmail}`);
+  } catch (error) {
+    handleErrorsInServerAction(error);
+  }
+};
