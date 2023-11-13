@@ -2,17 +2,12 @@
 
 import { DecksService } from "@/core/decks/decks.service";
 import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
-import {
-  BadRequestException,
-  UnauthenticatedException,
-  authenticate
-} from "@/utils";
+import { BadRequestException, authenticate } from "@/utils";
 import {
   ServerActionState,
   handleErrorsInServerAction
 } from "@/utils/errorHandlers";
 import { revalidatePath } from "next/cache";
-import * as context from "next/headers";
 
 export const createDeckAction = async (
   _prevState: ServerActionState,

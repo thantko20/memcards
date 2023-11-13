@@ -16,8 +16,11 @@ import { CreateDeckButton } from "./buttons";
 import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
 import { useFormState } from "react-dom";
 import { createDeckAction } from "@/actions/decks.actions";
+import { useToast } from "../ui/use-toast";
+import { useEffect } from "react";
 
 export const CreateDeckForm = () => {
+  const { toast } = useToast();
   const [state, action] = useFormState(createDeckAction, undefined);
   const form = useForm<CreateDeck>({
     defaultValues: {
@@ -26,6 +29,12 @@ export const CreateDeckForm = () => {
     },
     resolver: zodResolver(CreateDeckSchema)
   });
+
+  useEffect(() => {
+    if (state?.message) {
+      toast({ description: state.message, variant: "destructive" });
+    }
+  }, [state, toast]);
 
   return (
     <Form {...form}>

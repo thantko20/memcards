@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const CreateDeckSchema = z.object({
-  name: z.string(),
-  description: z.string().optional()
+  name: z.string().min(1),
+  description: z.string().min(1).optional()
 });
 
 export type CreateDeck = z.infer<typeof CreateDeckSchema>;

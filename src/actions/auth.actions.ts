@@ -15,11 +15,13 @@ import {
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/lucia";
 import * as context from "next/headers";
-import { handleErrorsInServerAction } from "@/utils/errorHandlers";
-import { UserService } from "@/core/users/users.service";
+import {
+  ServerActionState,
+  handleErrorsInServerAction
+} from "@/utils/errorHandlers";
 
 export const registerAction = async (
-  _prevState: { message: string } | null | undefined,
+  _prevState: ServerActionState,
   formData: RegisterFormValues
 ) => {
   try {
@@ -41,7 +43,7 @@ export const registerAction = async (
 };
 
 export const signInWithCredentialsAction = async (
-  _prevState: { message: string } | null | undefined,
+  _prevState: ServerActionState,
   formData: LoginFormValues
 ) => {
   try {
@@ -75,7 +77,7 @@ export const signOutAction = async () => {
 };
 
 export const checkIfEmailExistsAction = async (
-  _prevState: boolean | null | undefined,
+  _prevState: ServerActionState,
   theEmail: string
 ) => {
   try {
