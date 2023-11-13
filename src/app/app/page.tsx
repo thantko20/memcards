@@ -1,20 +1,18 @@
+import { CreateDeckForm } from "@/components/decks";
 import { getCurrentUser } from "@/data/users.data";
-import Image from "next/image";
+import { notFound } from "next/navigation";
 
 export default async function Page() {
   const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    notFound();
+  }
+
   return (
     <>
-      <div>Show the decks</div>
-      <div className="flex items-center gap-2">
-        <Image
-          src={currentUser?.avatar ?? ""}
-          alt="user avatar"
-          width={32}
-          height={32}
-          className="rounded-full"
-        />
-        <p>{currentUser?.email}</p>
+      <div>Show the decks and</div>
+      <div className="max-w-md mx-auto">
+        <CreateDeckForm />
       </div>
     </>
   );

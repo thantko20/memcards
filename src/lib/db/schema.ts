@@ -21,7 +21,9 @@ export const users = pgTable("users", {
   avatar: varchar("avatar", { length: 300 }),
   accountCompleteness: accountCompletenessEnum("account_completeness").default(
     "incomplete"
-  )
+  ),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });
 
 export const session = pgTable("user_sessions", {
@@ -49,6 +51,9 @@ export const decks = pgTable("decks", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 100 }).notNull().unique(),
   description: text("description"),
+  authorId: uuid("author_id")
+    .notNull()
+    .references(() => users.id),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });

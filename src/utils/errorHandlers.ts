@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
 import { BaseException, isNextRedirectError } from ".";
 
-export const handleErrorsInServerAction = (error: unknown) => {
+export type ServerActionError = {
+  message: string;
+  errors?: string[];
+  statusCode?: number;
+};
+
+export type ServerActionState<T = ServerActionError> = T | null | undefined;
+
+export const handleErrorsInServerAction = (
+  error: unknown
+): ServerActionError => {
   if (isNextRedirectError(error)) throw error;
 
   if (process.env.NODE_ENV !== "production") {
