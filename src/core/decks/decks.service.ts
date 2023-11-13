@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { CreateDeck } from "./decks.validations";
 import { decks } from "@/lib/db/schema";
-import { and, eq, ilike } from "drizzle-orm";
+import { SQL, and, eq, ilike } from "drizzle-orm";
 import { BadRequestException } from "@/utils";
 
 export * as DecksService from "./decks.service";
@@ -24,4 +24,15 @@ export const createDeck = async ({
     .returning();
 
   return newDeck;
+};
+
+export const getDecks = async ({ authorId }: { authorId?: string }) => {
+  const where: SQL[] = [];
+  if (authorId) {
+    where.push(eq(decks.authorId, authorId));
+  }
+  const result = await db.query.decks.findMany({
+    where: and(...where)
+  });
+  return result;
 };
