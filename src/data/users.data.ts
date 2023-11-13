@@ -1,15 +1,9 @@
-import { UserService } from "@/core/users/users.service";
-import { auth } from "@/lib/lucia";
+import { authenticate } from "@/utils";
 import { handleErrorsInServerAction } from "@/utils/errorHandlers";
-import * as context from "next/headers";
 
 export const getCurrentUser = async () => {
   try {
-    const authRequest = auth.handleRequest("GET", context);
-    const session = await authRequest.validate();
-
-    const user = await UserService.getUserById(session.user.id);
-
+    const { user } = await authenticate("get");
     return user;
   } catch (error) {
     handleErrorsInServerAction(error);

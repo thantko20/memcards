@@ -7,7 +7,7 @@ import { auth } from "@/lib/lucia";
 import { InferSelectModel, eq } from "drizzle-orm";
 import { users } from "@/lib/db/schema";
 import { LuciaError } from "lucia";
-import { BadRequestException } from "@/utils";
+import { BadRequestException, UnauthenticatedException } from "@/utils";
 import { db } from "@/lib/db";
 
 export * as AuthService from "./auth.service";

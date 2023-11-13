@@ -1,3 +1,4 @@
+import { InferSelectModel } from "drizzle-orm";
 import {
   pgTable,
   text,
@@ -26,6 +27,8 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });
 
+export type User = InferSelectModel<typeof users>;
+
 export const session = pgTable("user_sessions", {
   id: varchar("id", { length: 128 }).primaryKey(),
   userId: uuid("user_id")
@@ -38,6 +41,8 @@ export const session = pgTable("user_sessions", {
     mode: "number"
   }).notNull()
 });
+
+export type DbSession = InferSelectModel<typeof session>;
 
 export const key = pgTable("user_keys", {
   id: varchar("id", { length: 255 }).primaryKey(),

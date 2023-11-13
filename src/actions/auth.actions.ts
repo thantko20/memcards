@@ -1,7 +1,11 @@
 "use server";
 
 import { AuthService } from "@/core/auth/auth.service";
-import { BadRequestException, UnauthenticatedException } from "@/utils";
+import {
+  BadRequestException,
+  UnauthenticatedException,
+  authenticate
+} from "@/utils";
 import {
   LoginFormValues,
   LoginSchema,
@@ -58,8 +62,7 @@ export const signInWithCredentialsAction = async (
 
 export const signOutAction = async () => {
   try {
-    const authRequest = auth.handleRequest("POST", context);
-    const session = await authRequest.validate();
+    const { session, authRequest } = await authenticate("post");
     if (!session) {
       throw new UnauthenticatedException("You are not authenticated");
     }

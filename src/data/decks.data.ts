@@ -1,8 +1,8 @@
 import { DecksService } from "@/core/decks/decks.service";
-import { getCurrentUser } from "./users.data";
+import { authenticate } from "@/utils";
 
 export const getCurrentUserDecks = async () => {
-  const user = await getCurrentUser();
-  const decks = await DecksService.getDecks({ authorId: user?.id });
+  const { user } = await authenticate("get");
+  const decks = await DecksService.getDecks({ authorId: user.id });
   return decks;
 };

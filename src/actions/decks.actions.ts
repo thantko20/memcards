@@ -2,13 +2,17 @@
 
 import { DecksService } from "@/core/decks/decks.service";
 import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
-import { getCurrentUser } from "@/data/users.data";
-import { BadRequestException, UnauthenticatedException } from "@/utils";
+import {
+  BadRequestException,
+  UnauthenticatedException,
+  authenticate
+} from "@/utils";
 import {
   ServerActionState,
   handleErrorsInServerAction
 } from "@/utils/errorHandlers";
 import { revalidatePath } from "next/cache";
+import * as context from "next/headers";
 
 export const createDeckAction = async (
   _prevState: ServerActionState,
@@ -22,10 +26,7 @@ export const createDeckAction = async (
         result.error.flatten().formErrors
       );
 
-    const user = await getCurrentUser();
-    if (!user) {
-      throw new UnauthenticatedException("You are not authenticated");
-    }
+    const { user } = await authenticate("post");
 
     await DecksService.createDeck({ ...data, userId: user.id });
     revalidatePath("/app");
