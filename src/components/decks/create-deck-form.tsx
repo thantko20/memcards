@@ -17,7 +17,7 @@ import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
 import { useFormState } from "react-dom";
 import { createDeckAction } from "@/actions/decks.actions";
 import { useToast } from "../ui/use-toast";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 
 export const CreateDeckForm = () => {
   const { toast } = useToast();
@@ -29,6 +29,8 @@ export const CreateDeckForm = () => {
     },
     resolver: zodResolver(CreateDeckSchema)
   });
+
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (state?.message) {
@@ -44,6 +46,7 @@ export const CreateDeckForm = () => {
           if (!isValid) return;
           action(form.getValues());
         }}
+        className="space-y-4"
       >
         <FormField
           control={form.control}

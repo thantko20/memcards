@@ -1,4 +1,5 @@
 import { CreateDeckForm } from "@/components/decks";
+import { CreateDeckModal } from "@/components/decks/create-deck-modal";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,14 +44,15 @@ export default async function Page() {
 
   return (
     <>
+      <CreateDeckModal />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
         {decks.map((deck) => (
           <DeckCard deck={deck} key={deck.id} />
         ))}
       </div>
-      <div className="max-w-md mx-auto">
-        <CreateDeckForm />
-      </div>
+      {/* <div className="max-w-md mx-auto">
+      
+      </div> */}
     </>
   );
 }

@@ -7,7 +7,7 @@ export const CreateDeckButton = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" isLoading={pending}>
+    <Button type="submit" isLoading={pending} className="w-full">
       Create
     </Button>
   );
