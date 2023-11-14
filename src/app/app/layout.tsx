@@ -7,7 +7,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="md:container mx-auto">
       <Header user={currentUser} />
-      {children}
+      <main className="px-2">{children}</main>
     </div>
   );
 }

@@ -63,6 +63,8 @@ export const decks = pgTable("decks", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });
 
+export type Deck = InferSelectModel<typeof decks>;
+
 export const cards = pgTable("cards", {
   id: uuid("id").primaryKey().defaultRandom(),
   question: varchar("question", { length: 255 }).notNull(),
