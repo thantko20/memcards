@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useModalState } from "@/hooks/useModalState";
 import { User } from "@/lib/db/schema";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
@@ -34,19 +35,7 @@ const SignOutButton = () => {
 };
 
 const ProfileDropdownMenu = ({ user }: { user: User }) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const isSignOutOpen = searchParams.get("modal") === "signOut";
-
-  const onSignOutOpenChange = (open: boolean) => {
-    const params = new URLSearchParams(searchParams);
-    if (open) {
-      params.set("modal", "signOut");
-    } else {
-      params.delete("modal");
-    }
-    router.replace(`?${params.toString()}`);
-  };
+  const { isOpen, onChange, open } = useModalState("signout-alert");
 
   return (
     <>
@@ -68,12 +57,10 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="min-w-[200px]" align="end">
-          <DropdownMenuItem onClick={() => onSignOutOpenChange(true)}>
-            Sign Out
-          </DropdownMenuItem>
+          <DropdownMenuItem onClick={open}>Sign Out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <AlertDialog open={isSignOutOpen} onOpenChange={onSignOutOpenChange}>
+      <AlertDialog open={isOpen} onOpenChange={onChange}>
         <AlertDialogContent>
           <form action={signOutAction}>
             <AlertDialogHeader>

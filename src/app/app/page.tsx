@@ -20,13 +20,13 @@ const DeckCard = ({ deck }: { deck: DeckWithAuthor }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{deck.name}</CardTitle>
+        <CardTitle className="h-[2ch]">{deck.name}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="break-all h-12">{deck.description}</p>
         <p className="text-xs mt-2 italic">Created by {deck.author.name}</p>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button
           variant="default"
           className="w-full"

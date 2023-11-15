@@ -10,26 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { CreateDeckForm } from ".";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useModalState } from "@/hooks/useModalState";
 
 export function CreateDeckModal() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const isModalOpen = searchParams.get("modal") === "createDeck";
-
-  const onOpenChange = (open: boolean) => {
-    const params = new URLSearchParams(searchParams);
-    if (open) {
-      params.set("modal", "createDeck");
-    } else {
-      params.delete("modal");
-    }
-
-    router.replace(`?${params.toString()}`);
-  };
+  const { isOpen, onChange } = useModalState("create-deck-modal");
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onChange}>
       <DialogTrigger asChild>
         <Button variant="outline" leftSection={<Plus />}>
           Add Deck

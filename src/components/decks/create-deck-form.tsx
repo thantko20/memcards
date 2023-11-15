@@ -17,7 +17,7 @@ import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
 import { useFormState } from "react-dom";
 import { createDeckAction } from "@/actions/decks.actions";
 import { useToast } from "../ui/use-toast";
-import { useEffect, useTransition } from "react";
+import { useEffect } from "react";
 
 export const CreateDeckForm = () => {
   const { toast } = useToast();
@@ -29,8 +29,6 @@ export const CreateDeckForm = () => {
     },
     resolver: zodResolver(CreateDeckSchema)
   });
-
-  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (state?.message) {
