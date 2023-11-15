@@ -1,4 +1,4 @@
-import { InferSelectModel } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 import {
   pgTable,
   text,
@@ -62,6 +62,13 @@ export const decks = pgTable("decks", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });
+
+export const deckRelations = relations(decks, ({ one }) => ({
+  author: one(users, {
+    fields: [decks.authorId],
+    references: [users.id]
+  })
+}));
 
 export type Deck = InferSelectModel<typeof decks>;
 

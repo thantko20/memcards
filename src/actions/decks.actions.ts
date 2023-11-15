@@ -8,6 +8,7 @@ import {
   handleErrorsInServerAction
 } from "@/utils/errorHandlers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export const createDeckAction = async (
   _prevState: ServerActionState,
@@ -25,6 +26,7 @@ export const createDeckAction = async (
 
     await DecksService.createDeck({ ...data, userId: user.id });
     revalidatePath("/app");
+    redirect("/app");
   } catch (error) {
     return handleErrorsInServerAction(error);
   }

@@ -70,6 +70,7 @@ export const signOutAction = async () => {
     }
     await auth.invalidateSession(session?.sessionId ?? "");
     authRequest.setSession(null);
+    console.log("???");
     redirect("/login");
   } catch (error) {
     handleErrorsInServerAction(error);

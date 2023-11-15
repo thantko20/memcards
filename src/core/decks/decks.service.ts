@@ -32,7 +32,10 @@ export const getDecks = async ({ authorId }: { authorId?: string }) => {
     where.push(eq(decks.authorId, authorId));
   }
   const result = await db.query.decks.findMany({
-    where: and(...where)
+    where: and(...where),
+    with: {
+      author: true
+    }
   });
   return result;
 };
