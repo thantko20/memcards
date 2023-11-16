@@ -48,7 +48,8 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
                 {user.name
                   .split(" ")
                   .map((name) => name[0].toUpperCase())
-                  .join("")}
+                  .join("")
+                  .substring(0, 2)}
               </AvatarFallback>
             </Avatar>
             <span className="text-sm text-gray-600 dark:text-gray-300">

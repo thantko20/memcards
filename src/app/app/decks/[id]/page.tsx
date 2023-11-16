@@ -1,3 +1,4 @@
+import { AddCardModal } from "@/components/decks/add-card-modal";
 import { Button } from "@/components/ui/button";
 import { DecksService } from "@/core/decks/decks.service";
 import { authenticate } from "@/utils";
@@ -20,7 +21,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     <>
       <h2 className="text-5xl font-semibold">{deck.name}</h2>
       <p>{deck.description}</p>
-      <Button>Add Card</Button>
+      <AddCardModal deckId={deck.id} />
     </>
   );
 }
