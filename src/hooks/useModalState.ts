@@ -1,4 +1,5 @@
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 /**
  * A hook that manages the state of a modal
@@ -8,15 +9,18 @@ export const useModalState = (key: string) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const onChange = (state: boolean) => {
-    const params = new URLSearchParams(searchParams);
-    if (state) {
-      params.set("modal", key);
-    } else {
-      params.delete("modal");
-    }
-    router.replace(`?${params.toString()}`);
-  };
+  const onChange = useCallback(
+    (state: boolean) => {
+      const params = new URLSearchParams(searchParams);
+      if (state) {
+        params.set("modal", key);
+      } else {
+        params.delete("modal");
+      }
+      router.replace(`?${params.toString()}`);
+    },
+    [key, router, searchParams]
+  );
 
   const open = () => onChange(true);
   const close = () => onChange(false);

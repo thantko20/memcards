@@ -1,14 +1,14 @@
-import * as bcrypt from "bcrypt";
 import crypto from "crypto";
 
 import { UserService } from "../users/users.service";
 import { RegisterFormValues } from "@/core/auth/auth.validation";
 import { auth } from "@/lib/lucia";
 import { InferSelectModel, eq } from "drizzle-orm";
-import { users } from "@/lib/db/schema";
+import { DbSession, User, users } from "@/lib/db/schema";
 import { LuciaError } from "lucia";
 import { BadRequestException, UnauthenticatedException } from "@/utils";
 import { db } from "@/lib/db";
+import * as context from "next/headers";
 
 export * as AuthService from "./auth.service";
 
@@ -82,4 +82,31 @@ export const checkIfEmailExists = async (email: string) => {
     emailExists: !!user,
     email: user?.email ?? null
   };
+};
+
+/**
+ * This method is tightly coupled to NextJS's headers.
+ * Might refactor into a separate class
+ *
+ * @param {'GET' | 'POST' | 'get' | 'post'} method - request method
+ * @param {'bearer' | 'cookies'} type
+ */
+export const authenticate = async (
+  method: "GET" | "POST" | "get" | "post",
+  type: "bearer" | "cookies" = "cookies"
+) => {
+  const authRequest = auth.handleRequest(method, context);
+  let session: (DbSession & { user: User; sessionId: string }) | undefined;
+  if (type === "cookies") {
+    session = await authRequest.validate();
+  } else {
+    session = await authRequest.validateBearerToken();
+  }
+
+  if (!session) {
+    throw new UnauthenticatedException("You are not authenticated");
+  }
+
+  const user: User = await auth.getUser(session?.user?.id);
+  return { user, session, authRequest };
 };

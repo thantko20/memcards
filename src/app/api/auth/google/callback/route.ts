@@ -18,7 +18,6 @@ export const GET = async (request: NextRequest) => {
   try {
     const { getExistingUser, googleUser, createUser } =
       await googleAuth.validateCallback(code);
-    console.log(googleUser);
     let user: InferSelectModel<typeof users>;
     const existingUser = await getExistingUser();
     if (existingUser) {

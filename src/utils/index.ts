@@ -1,4 +1,4 @@
 export * from "./objectToFormData";
 export * from "./isNextRedirectError";
 export * from "./exceptions";
-export * from "./authenticate";
+export * from "./toNameAbbr";

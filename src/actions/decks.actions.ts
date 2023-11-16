@@ -1,8 +1,9 @@
 "use server";
 
+import { AuthService } from "@/core/auth/auth.service";
 import { DecksService } from "@/core/decks/decks.service";
 import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
-import { BadRequestException, authenticate } from "@/utils";
+import { BadRequestException } from "@/utils";
 import {
   ServerActionState,
   handleErrorsInServerAction
@@ -22,7 +23,7 @@ export const createDeckAction = async (
         result.error.flatten().formErrors
       );
 
-    const { user } = await authenticate("post");
+    const { user } = await AuthService.authenticate("post");
 
     await DecksService.createDeck({ ...data, userId: user.id });
     revalidatePath("/app");

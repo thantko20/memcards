@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect("/app");
+    return NextResponse.redirect(new URL("/app", request.nextUrl));
   }
   return;
 }

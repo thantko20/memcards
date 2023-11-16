@@ -10,7 +10,8 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-  CardFooter
+  CardFooter,
+  CardDescription
 } from "../ui/card";
 
 export type DeckWithAuthor = Deck & { author: User };
@@ -21,11 +22,8 @@ export const DeckCard = ({ deck }: { deck: DeckWithAuthor }) => {
     <Card>
       <CardHeader>
         <CardTitle className="h-[2ch]">{deck.name}</CardTitle>
+        <CardDescription>Created by {deck.author.name}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="break-all h-12">{deck.description}</p>
-        <p className="text-xs mt-2 italic">Created by {deck.author.name}</p>
-      </CardContent>
       <CardFooter className="mt-auto">
         <Button
           variant="default"

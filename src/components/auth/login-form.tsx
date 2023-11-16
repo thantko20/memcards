@@ -102,6 +102,14 @@ export const LoginForm = () => {
                   </FormItem>
                 )}
               />
+              <div>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-gray-600 dark:text-gray-400"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
               <LoginButton />
             </form>
           </Form>

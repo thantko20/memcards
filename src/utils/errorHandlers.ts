@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { BaseException, isNextRedirectError } from ".";
+import { ActionReturnType } from "@/hooks/useActionForm";
 
 export type ServerActionError = {
   message: string;
@@ -11,7 +12,7 @@ export type ServerActionState<T = ServerActionError> = T | null | undefined;
 
 export const handleErrorsInServerAction = (
   error: unknown
-): ServerActionError => {
+): ActionReturnType => {
   if (isNextRedirectError(error)) throw error;
 
   if (process.env.NODE_ENV !== "production") {
@@ -21,12 +22,19 @@ export const handleErrorsInServerAction = (
   if (error instanceof BaseException) {
     return {
       message: error.message,
-      errors: error.errors,
-      statusCode: error.statusCode
+      data: error.errors,
+      statusCode: error.statusCode,
+      status: "error"
     };
   }
 
-  return { message: "Unknown Error!" };
+  return {
+    message: "Unknown Error!",
+    data: undefined,
+    status: "error",
+    error,
+    statusCode: 500
+  };
 };
 
 export const handleErrorsInApi = (error: unknown) => {

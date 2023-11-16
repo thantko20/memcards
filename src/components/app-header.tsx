@@ -19,9 +19,9 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useDisclosure } from "@/hooks";
 import { useModalState } from "@/hooks/useModalState";
 import { User } from "@/lib/db/schema";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
 
 const SignOutButton = () => {
@@ -35,7 +35,7 @@ const SignOutButton = () => {
 };
 
 const ProfileDropdownMenu = ({ user }: { user: User }) => {
-  const { isOpen, onChange, open } = useModalState("signout-alert");
+  const { isOpen, onChange, open } = useDisclosure();
 
   return (
     <>

@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { CreateDeckForm } from ".";
-import { useModalState } from "@/hooks/useModalState";
+import { useDisclosure } from "@/hooks";
 
 export function CreateDeckModal() {
-  const { isOpen, onChange } = useModalState("create-deck-modal");
+  const { isOpen, onChange } = useDisclosure();
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
