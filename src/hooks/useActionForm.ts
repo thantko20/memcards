@@ -37,9 +37,10 @@ export const useActionForm = <Data, Payload>(
     }
 
     if (state?.status === "error") {
-      onError?.(state?.error);
+      onError?.(new Error(state.message));
     }
-  }, [state, onSuccess, onError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   return { state, action };
 };

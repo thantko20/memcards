@@ -20,6 +20,7 @@ import {
   FormMessage
 } from "../ui/form";
 import { registerAction } from "@/actions/auth.actions";
+import { useActionForm } from "@/hooks/useActionForm";
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -32,7 +33,7 @@ const SubmitButton = () => {
 };
 
 export const RegisterForm = ({ email }: { email?: string }) => {
-  const [state, action] = useFormState(registerAction, null);
+  const { state, action } = useActionForm(registerAction);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {

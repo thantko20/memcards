@@ -17,10 +17,17 @@ import { useFormState } from "react-dom";
 import { createDeckAction } from "@/actions/decks.actions";
 import { useToast } from "../ui/use-toast";
 import { useEffect } from "react";
+import { useActionForm } from "@/hooks/useActionForm";
 
 export const CreateDeckForm = () => {
   const { toast } = useToast();
-  const [state, action] = useFormState(createDeckAction, undefined);
+  const { action, state } = useActionForm(createDeckAction, {
+    onError: (error) => {
+      if (error instanceof Error) {
+        toast({ description: error.message, variant: "destructive" });
+      }
+    }
+  });
   const form = useForm<CreateDeck>({
     defaultValues: {
       description: "",
@@ -29,11 +36,11 @@ export const CreateDeckForm = () => {
     resolver: zodResolver(CreateDeckSchema)
   });
 
-  useEffect(() => {
-    if (state?.message) {
-      toast({ description: state.message, variant: "destructive" });
-    }
-  }, [state, toast]);
+  // useEffect(() => {
+  //   if (state?.message) {
+  //     toast({ description: state.message, variant: "destructive" });
+  //   }
+  // }, [state, toast]);
 
   return (
     <Form {...form}>

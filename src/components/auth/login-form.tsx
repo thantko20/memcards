@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { LoginFormValues, LoginSchema } from "@/core/auth/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,14 +21,13 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
-  CardFooter
+  CardContent
 } from "../ui/card";
 import { Link } from "../ui/link";
-import Image from "next/image";
+import { useActionForm } from "@/hooks/useActionForm";
 
 export const LoginForm = () => {
-  const [state, action] = useFormState(signInWithCredentialsAction, null);
+  const { state, action } = useActionForm(signInWithCredentialsAction);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {

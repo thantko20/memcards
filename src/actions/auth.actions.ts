@@ -16,10 +16,7 @@ import {
   handleErrorsInServerAction
 } from "@/utils/errorHandlers";
 
-export const registerAction = async (
-  _prevState: ServerActionState,
-  formData: RegisterFormValues
-) => {
+export const registerAction = async (formData: RegisterFormValues) => {
   try {
     const result = RegisterSchema.safeParse(formData);
 
@@ -39,7 +36,6 @@ export const registerAction = async (
 };
 
 export const signInWithCredentialsAction = async (
-  _prevState: ServerActionState,
   formData: LoginFormValues
 ) => {
   try {
@@ -72,14 +68,11 @@ export const signOutAction = async () => {
   }
 };
 
-export const checkIfEmailExistsAction = async (
-  _prevState: ServerActionState,
-  theEmail: string
-) => {
+export const checkIfEmailExistsAction = async (theEmail: string) => {
   try {
     const { emailExists } = await AuthService.checkIfEmailExists(theEmail);
     if (emailExists) {
-      return true;
+      return { data: true, status: "success" as const };
     }
     redirect(`/register?email=${theEmail}`);
   } catch (error) {

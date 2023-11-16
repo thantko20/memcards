@@ -18,7 +18,7 @@ export const createDeck = async ({
       `Deck with name "${data.name}" is already in your collections`
     );
   }
-  const newDeck = await db
+  const [newDeck] = await db
     .insert(decks)
     .values({ ...data, authorId: userId })
     .returning();

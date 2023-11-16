@@ -6,7 +6,7 @@ import {
   EmailExistsFormSchema
 } from "@/core/auth/auth.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
@@ -18,8 +18,8 @@ import {
   Form
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useEffect } from "react";
 import { Alert, AlertDescription } from "../ui/alert";
+import { useActionForm } from "@/hooks/useActionForm";
 
 const CheckEmailButton = () => {
   const { pending } = useFormStatus();
@@ -32,7 +32,7 @@ const CheckEmailButton = () => {
 };
 
 export const CheckEmailForm = () => {
-  const [emailExists, action] = useFormState(checkIfEmailExistsAction, null);
+  const { state, action } = useActionForm(checkIfEmailExistsAction);
 
   const form = useForm<EmailExistsFormValues>({
     resolver: zodResolver(EmailExistsFormSchema),
@@ -43,7 +43,7 @@ export const CheckEmailForm = () => {
 
   return (
     <Form {...form}>
-      {emailExists ? (
+      {state?.data ? (
         <Alert variant="destructive">
           <AlertDescription>Email is already taken</AlertDescription>
         </Alert>
