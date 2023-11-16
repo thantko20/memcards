@@ -39,3 +39,14 @@ export const getDecks = async ({ authorId }: { authorId?: string }) => {
   });
   return result;
 };
+
+export const getDeckById = async (id: string) => {
+  const result = await db.query.decks.findFirst({
+    where: eq(decks.id, id),
+    with: {
+      author: true
+    }
+  });
+
+  return result;
+};
