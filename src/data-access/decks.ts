@@ -1,8 +1,24 @@
-import { AuthService } from "@/core/auth/auth.service";
 import { DecksService } from "@/core/decks/decks.service";
+import { data } from "@/utils/data-access";
+import { z } from "zod";
 
-export const getCurrentUserDecks = async () => {
-  const { user } = await AuthService.authenticate("get");
-  const decks = await DecksService.getDecks({ authorId: user.id });
+export const getCurrentUserDecks = data(
+  true,
+  z.object({}),
+  async (_, { user }) => {
+    const decks = await DecksService.getDecks({ authorId: user.id });
+    return decks;
+  }
+);
+
+export const getPublicDecks = data(z.object({}), async () => {
+  const decks = await DecksService.getDecks();
   return decks;
-};
+});
+
+export const getDeckById = data(
+  z.object({ id: z.string().uuid() }),
+  async ({ id }) => {
+    return await DecksService.getDeckById(id);
+  }
+);

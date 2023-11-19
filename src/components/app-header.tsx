@@ -23,6 +23,8 @@ import { useDisclosure } from "@/hooks";
 import { User } from "@/lib/db/schema";
 import { useAction } from "next-safe-action/hook";
 import { toast } from "./ui/use-toast";
+import { Link } from "./ui/link";
+import NextLink from "next/link";
 
 const ProfileDropdownMenu = ({ user }: { user: User }) => {
   const { isOpen, onChange, open } = useDisclosure();
@@ -84,7 +86,19 @@ export const Header = ({ user }: { user?: User }) => {
   return (
     <>
       <div className="flex items-center justify-between px-2 py-4">
-        <span>Logo</span>
+        <div className="flex gap-4 items-center">
+          <NextLink href="/app">Logo</NextLink>
+          <nav>
+            <ul className="flex gap-2 items-center">
+              <li>
+                <Link href="/app">Explore Decks</Link>
+              </li>
+              <li>
+                <Link href="/app/me">Your Decks</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
         <div className="flex items-center gap-4">
           {user ? <ProfileDropdownMenu user={user} /> : null}
           <ThemeToggle />

@@ -26,7 +26,8 @@ export const createDeck = async ({
   return newDeck;
 };
 
-export const getDecks = async ({ authorId }: { authorId?: string }) => {
+export const getDecks = async (query?: { authorId?: string }) => {
+  const { authorId } = query || {};
   const where: SQL[] = [];
   if (authorId) {
     where.push(eq(decks.authorId, authorId));

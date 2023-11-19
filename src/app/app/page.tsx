@@ -1,16 +1,9 @@
 import { DeckCard } from "@/components/decks";
 import { CreateDeckModal } from "@/components/decks/create-deck-modal";
 import { getCurrentUserDecks } from "@/data-access/decks";
-import { getCurrentUser } from "@/data-access/users";
-import { notFound } from "next/navigation";
 
 export default async function Page() {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    notFound();
-  }
-
-  const decks = await getCurrentUserDecks();
+  const decks = await getCurrentUserDecks({});
 
   return (
     <>
