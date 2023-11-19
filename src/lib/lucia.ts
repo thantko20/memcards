@@ -3,8 +3,9 @@ import { nextjs_future } from "lucia/middleware";
 import { pg } from "@lucia-auth/adapter-postgresql";
 import { pool } from "./db";
 import { InferSelectModel } from "drizzle-orm";
-import { users } from "./db/schema";
+import { User, users } from "./db/schema";
 import { google } from "@lucia-auth/oauth/providers";
+import { UnauthenticatedException } from "@/utils";
 
 export const auth = lucia({
   env: "DEV",
@@ -42,3 +43,17 @@ export const googleAuth = google(auth, {
 });
 
 export type Auth = typeof auth;
+
+export const authenticate = async (method: string, context: any) => {
+  const authRequest = auth.handleRequest(method, context);
+  const session = await authRequest.validate();
+  if (!session) {
+    throw new UnauthenticatedException();
+  }
+
+  return {
+    session,
+    user: session.user as User,
+    authRequest
+  };
+};

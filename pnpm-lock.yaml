@@ -62,6 +62,9 @@ dependencies:
   next-auth:
     specifier: 5.0.0-beta.3
     version: 5.0.0-beta.3(next@14.0.1)(react@18.2.0)
+  next-safe-action:
+    specifier: ^5.0.3
+    version: 5.0.3(next@14.0.1)(react@18.2.0)(zod@3.22.4)
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
@@ -3300,6 +3303,19 @@ packages:
       '@auth/core': 0.0.0-manual.e9863699
       next: 14.0.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
+    dev: false
+
+  /next-safe-action@5.0.3(next@14.0.1)(react@18.2.0)(zod@3.22.4):
+    resolution: {integrity: sha512-97Tvu4BDA2jCSexDSgUW2H/zXizDKnudukTbqXkGXDHhpe6P3rkaUpHSBjkHSxID8ejKolPcnHBy8N+dJ8gI8g==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      next: '>= 14.0.0'
+      react: '>= 18.2.0'
+      zod: '>= 3.0.0'
+    dependencies:
+      next: 14.0.1(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+      zod: 3.22.4
     dev: false
 
   /next-themes@0.2.1(next@14.0.1)(react-dom@18.2.0)(react@18.2.0):

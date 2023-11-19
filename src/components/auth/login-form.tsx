@@ -14,7 +14,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { signInWithCredentialsAction } from "@/actions/auth.actions";
-import { GoogleSignInButton, LoginButton } from "./buttons";
+import { GoogleSignInButton } from "./buttons";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -24,10 +24,9 @@ import {
   CardContent
 } from "../ui/card";
 import { Link } from "../ui/link";
-import { useActionForm } from "@/hooks/useActionForm";
+import { useAction } from "next-safe-action/hook";
 
 export const LoginForm = () => {
-  const { state, action } = useActionForm(signInWithCredentialsAction);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -35,6 +34,7 @@ export const LoginForm = () => {
       password: ""
     }
   });
+  const { execute, status, result } = useAction(signInWithCredentialsAction);
 
   return (
     <div className="max-w-md mx-auto space-y-2">
@@ -51,17 +51,17 @@ export const LoginForm = () => {
             <div className="h-[0.75px] bg-gray-300 dark:bg-gray-700 w-full" />
           </div>
           <Form {...form}>
-            {state?.message ? (
+            {result.serverError ? (
               <Alert variant="destructive">
-                <AlertDescription>{state?.message}</AlertDescription>
+                <AlertDescription>{result.serverError}</AlertDescription>
               </Alert>
             ) : null}
             <form
               id="login-form"
               action={async () => {
-                const valid = await form.trigger();
-                if (!valid) return;
-                action(form.getValues());
+                if (await form.trigger()) {
+                  execute(form.getValues());
+                }
               }}
               className="space-y-4"
             >
@@ -101,14 +101,17 @@ export const LoginForm = () => {
                 )}
               />
               <div>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-gray-600 dark:text-gray-400"
-                >
+                <Link href="/forgot-password" className="text-sm">
                   Forgot Password?
                 </Link>
               </div>
-              <LoginButton />
+              <Button
+                className="w-full mt-4"
+                isLoading={status === "executing"}
+                type="submit"
+              >
+                Login
+              </Button>
             </form>
           </Form>
         </CardContent>

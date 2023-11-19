@@ -11,71 +11,39 @@ import {
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/lucia";
 import * as context from "next/headers";
-import {
-  ServerActionState,
-  handleErrorsInServerAction
-} from "@/utils/errorHandlers";
+import { action, guardedAction } from "@/lib/safe-action";
+import { z } from "zod";
 
-export const registerAction = async (formData: RegisterFormValues) => {
-  try {
-    const result = RegisterSchema.safeParse(formData);
+export const registerAction = action(RegisterSchema, async (data) => {
+  const { session } = await AuthService.register(data);
+  const authRequest = auth.handleRequest("POST", context);
+  authRequest.setSession(session);
+  redirect("/login");
+});
 
-    if (!result.success)
-      throw new BadRequestException(
-        "Validation errors",
-        result.error.flatten().formErrors
-      );
+export const signInWithCredentialsAction = action(LoginSchema, async (data) => {
+  const { session } = await AuthService.loginWithCredentials(data);
+  const authRequest = auth.handleRequest("POST", context);
+  authRequest.setSession(session);
+  redirect("/app");
+});
 
-    const { session } = await AuthService.register(result.data);
-    const authRequest = auth.handleRequest("POST", context);
-    authRequest.setSession(session);
-    redirect("/login");
-  } catch (error) {
-    return handleErrorsInServerAction(error);
-  }
-};
-
-export const signInWithCredentialsAction = async (
-  formData: LoginFormValues
-) => {
-  try {
-    const result = LoginSchema.safeParse(formData);
-    if (!result.success)
-      throw new BadRequestException(
-        "Validation errors",
-        result.error.flatten().formErrors
-      );
-    const { session } = await AuthService.loginWithCredentials(result.data);
-    const authRequest = auth.handleRequest("POST", context);
-    authRequest.setSession(session);
-    redirect("/app");
-  } catch (error) {
-    return handleErrorsInServerAction(error);
-  }
-};
-
-export const signOutAction = async () => {
-  try {
-    const { session, authRequest } = await AuthService.authenticate("post");
-    if (!session) {
-      throw new UnauthenticatedException("You are not authenticated");
-    }
-    await auth.invalidateSession(session?.sessionId ?? "");
+export const signOutAction = guardedAction(
+  z.undefined(),
+  async (_, { session, authRequest }) => {
+    await auth.invalidateSession(session.sessionId);
     authRequest.setSession(null);
     redirect("/login");
-  } catch (error) {
-    handleErrorsInServerAction(error);
   }
-};
+);
 
-export const checkIfEmailExistsAction = async (theEmail: string) => {
-  try {
+export const checkIfEmailExistsAction = action(
+  z.string().email(),
+  async (theEmail) => {
     const { emailExists } = await AuthService.checkIfEmailExists(theEmail);
     if (emailExists) {
-      return { data: true, status: "success" as const };
+      return true;
     }
     redirect(`/register?email=${theEmail}`);
-  } catch (error) {
-    handleErrorsInServerAction(error);
   }
-};
+);

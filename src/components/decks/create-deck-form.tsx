@@ -11,23 +11,14 @@ import {
   FormMessage
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { CreateDeckButton } from "./buttons";
 import { CreateDeck, CreateDeckSchema } from "@/core/decks/decks.validations";
-import { useFormState } from "react-dom";
 import { createDeckAction } from "@/actions/decks.actions";
 import { useToast } from "../ui/use-toast";
-import { useEffect } from "react";
-import { useActionForm } from "@/hooks/useActionForm";
+import { useAction } from "next-safe-action/hook";
+import { Button } from "../ui/button";
 
 export const CreateDeckForm = () => {
   const { toast } = useToast();
-  const { action, state } = useActionForm(createDeckAction, {
-    onError: (error) => {
-      if (error instanceof Error) {
-        toast({ description: error.message, variant: "destructive" });
-      }
-    }
-  });
   const form = useForm<CreateDeck>({
     defaultValues: {
       description: "",
@@ -36,19 +27,22 @@ export const CreateDeckForm = () => {
     resolver: zodResolver(CreateDeckSchema)
   });
 
-  // useEffect(() => {
-  //   if (state?.message) {
-  //     toast({ description: state.message, variant: "destructive" });
-  //   }
-  // }, [state, toast]);
+  const { status, execute } = useAction(createDeckAction, {
+    onError: (e) => {
+      toast({
+        description: e.serverError,
+        variant: "destructive"
+      });
+    }
+  });
 
   return (
     <Form {...form}>
       <form
         action={async () => {
-          const isValid = await form.trigger();
-          if (!isValid) return;
-          action(form.getValues());
+          if (await form.trigger()) {
+            execute(form.getValues());
+          }
         }}
         className="space-y-4"
       >
@@ -78,7 +72,9 @@ export const CreateDeckForm = () => {
             </FormItem>
           )}
         />
-        <CreateDeckButton />
+        <Button type="submit" isLoading={status === "executing"}>
+          Create
+        </Button>
       </form>
     </Form>
   );

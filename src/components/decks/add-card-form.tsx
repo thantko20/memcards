@@ -3,7 +3,6 @@
 import { addCardAction } from "@/actions/cards.actions";
 import { AddCard, AddCardSchema } from "@/core/cards/cards.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFormStatus, useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Button } from "../ui/button";
@@ -17,25 +16,10 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { notFound, useParams } from "next/navigation";
-import { useActionForm } from "@/hooks/useActionForm";
-
-const AddCardButton = () => {
-  const { pending } = useFormStatus();
-  return (
-    <Button className="w-full" type="submit" isLoading={pending}>
-      Add
-    </Button>
-  );
-};
+import { useAction } from "next-safe-action/hook";
 
 export const AddCardForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { id: deckId } = useParams();
-  const { state, action } = useActionForm(addCardAction, {
-    onError(error) {
-      console.log(error);
-    },
-    onSuccess
-  });
 
   if (typeof deckId !== "string") {
     notFound();
@@ -50,18 +34,25 @@ export const AddCardForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       question: ""
     }
   });
+  const { status, result, execute } = useAction(addCardAction, {
+    onSuccess: () => {
+      form.reset();
+      onSuccess?.();
+    }
+  });
   return (
     <>
-      {state?.message ? (
+      {result.serverError ? (
         <Alert>
-          <AlertDescription>{state.message}</AlertDescription>
+          <AlertDescription>{result.serverError}</AlertDescription>
         </Alert>
       ) : null}
       <Form {...form}>
         <form
           action={async () => {
-            const valid = await form.trigger();
-            if (valid) action(form.getValues());
+            if (await form.trigger()) {
+              execute(form.getValues());
+            }
           }}
           className="space-y-4"
         >
@@ -104,7 +95,9 @@ export const AddCardForm = ({ onSuccess }: { onSuccess?: () => void }) => {
               </FormItem>
             )}
           />
-          <AddCardButton />
+          <Button isLoading={status === "executing"} type="submit">
+            Submit
+          </Button>
         </form>
       </Form>
     </>

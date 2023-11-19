@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Alert, AlertDescription } from "../ui/alert";
@@ -20,20 +18,9 @@ import {
   FormMessage
 } from "../ui/form";
 import { registerAction } from "@/actions/auth.actions";
-import { useActionForm } from "@/hooks/useActionForm";
-
-const SubmitButton = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit" isLoading={pending} className="mt-8 w-full">
-      Sign Up
-    </Button>
-  );
-};
+import { useAction } from "next-safe-action/hook";
 
 export const RegisterForm = ({ email }: { email?: string }) => {
-  const { state, action } = useActionForm(registerAction);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -43,26 +30,25 @@ export const RegisterForm = ({ email }: { email?: string }) => {
       username: ""
     }
   });
-
-  useEffect(() => {
-    if (state === null) {
+  const { execute, status, result } = useAction(registerAction, {
+    onSuccess: () => {
       form.reset();
     }
-  }, [state, form]);
+  });
 
   return (
     <Form {...form}>
-      {state?.message ? (
+      {result.serverError ? (
         <Alert variant="destructive">
-          <AlertDescription>{state?.message}</AlertDescription>
+          <AlertDescription>{result.serverError}</AlertDescription>
         </Alert>
       ) : null}
       <form
         id="login-form"
         action={async () => {
-          const valid = await form.trigger();
-          if (!valid) return;
-          action(form.getValues());
+          if (await form.trigger()) {
+            execute(form.getValues());
+          }
         }}
         className="space-y-4"
       >
@@ -120,7 +106,9 @@ export const RegisterForm = ({ email }: { email?: string }) => {
             </FormItem>
           )}
         />
-        <SubmitButton />
+        <Button isLoading={status === "executing"} className="mt-8 w-full">
+          Sign Up
+        </Button>
       </form>
     </Form>
   );

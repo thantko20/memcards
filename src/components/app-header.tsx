@@ -20,22 +20,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useDisclosure } from "@/hooks";
-import { useModalState } from "@/hooks/useModalState";
 import { User } from "@/lib/db/schema";
-import { useFormStatus } from "react-dom";
-
-const SignOutButton = () => {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button isLoading={pending} type="submit">
-      Continue
-    </Button>
-  );
-};
+import { useAction } from "next-safe-action/hook";
+import { toast } from "./ui/use-toast";
 
 const ProfileDropdownMenu = ({ user }: { user: User }) => {
   const { isOpen, onChange, open } = useDisclosure();
+  const { execute, status } = useAction(signOutAction, {
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        description: error.serverError ?? "Something went wrong!"
+      });
+    }
+  });
 
   return (
     <>
@@ -63,14 +61,16 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
       </DropdownMenu>
       <AlertDialog open={isOpen} onOpenChange={onChange}>
         <AlertDialogContent>
-          <form action={signOutAction}>
+          <form action={() => execute(undefined)}>
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure to sign out?</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction asChild>
-                <SignOutButton />
+                <Button isLoading={status === "executing"} type="submit">
+                  Continue
+                </Button>
               </AlertDialogAction>
             </AlertDialogFooter>
           </form>
