@@ -9,12 +9,10 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardContent,
   CardFooter,
   CardDescription
 } from "../ui/card";
-
-export type DeckWithAuthor = Deck & { author: User };
+import { DeckWithAuthor } from "./types";
 
 export const DeckCard = ({ deck }: { deck: DeckWithAuthor }) => {
   const router = useRouter();
