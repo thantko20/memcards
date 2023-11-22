@@ -13,7 +13,7 @@ import { CreateDeckForm } from ".";
 import { useDisclosure } from "@/hooks";
 
 export function CreateDeckModal() {
-  const { isOpen, onChange } = useDisclosure();
+  const { isOpen, onChange, close } = useDisclosure();
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
@@ -26,7 +26,7 @@ export function CreateDeckModal() {
         <DialogHeader>
           <DialogTitle>Add a deck</DialogTitle>
         </DialogHeader>
-        <CreateDeckForm />
+        <CreateDeckForm onSuccess={close} />
       </DialogContent>
     </Dialog>
   );

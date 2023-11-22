@@ -14,6 +14,6 @@ export const createDeckAction = guardedAction(
       userId: user.id
     });
     revalidatePath("/app");
-    redirect(`/app/decks/${newDeck.id}`);
+    return newDeck;
   }
 );

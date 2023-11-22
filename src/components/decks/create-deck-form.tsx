@@ -17,7 +17,7 @@ import { useToast } from "../ui/use-toast";
 import { useAction } from "next-safe-action/hook";
 import { Button } from "../ui/button";
 
-export const CreateDeckForm = () => {
+export const CreateDeckForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { toast } = useToast();
   const form = useForm<CreateDeck>({
     defaultValues: {
@@ -28,6 +28,7 @@ export const CreateDeckForm = () => {
   });
 
   const { status, execute } = useAction(createDeckAction, {
+    onSuccess,
     onError: (e) => {
       toast({
         description: e.serverError,

@@ -5,9 +5,9 @@ import { ReactNode } from "react";
 export default async function Layout({ children }: { children: ReactNode }) {
   const currentUser = await getCurrentUser({});
   return (
-    <div className="md:container mx-auto">
+    <div>
       <Header user={currentUser} />
-      <main className="px-2 py-4">{children}</main>
+      <main className="px-2 py-4 md:container mx-auto">{children}</main>
     </div>
   );
 }

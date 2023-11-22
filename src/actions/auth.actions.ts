@@ -1,13 +1,7 @@
 "use server";
 
 import { AuthService } from "@/core/auth/auth.service";
-import { BadRequestException, UnauthenticatedException } from "@/utils";
-import {
-  LoginFormValues,
-  LoginSchema,
-  RegisterFormValues,
-  RegisterSchema
-} from "@/core/auth/auth.validation";
+import { LoginSchema, RegisterSchema } from "@/core/auth/auth.validation";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/lucia";
 import * as context from "next/headers";

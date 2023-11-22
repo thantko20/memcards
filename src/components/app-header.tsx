@@ -25,6 +25,7 @@ import { useAction } from "next-safe-action/hook";
 import { toast } from "./ui/use-toast";
 import { Link } from "./ui/link";
 import NextLink from "next/link";
+import { Logo } from "./logo";
 
 const ProfileDropdownMenu = ({ user }: { user: User }) => {
   const { isOpen, onChange, open } = useDisclosure();
@@ -41,7 +42,7 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="py-6">
+          <Button variant="ghost" className="p-2">
             <Avatar>
               <AvatarImage src={user.avatar ?? ""} alt="user avatar" />
               <AvatarFallback>
@@ -52,9 +53,9 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
                   .substring(0, 2)}
               </AvatarFallback>
             </Avatar>
-            <span className="text-sm text-gray-600 dark:text-gray-300">
+            {/* <span className="text-sm text-gray-600 dark:text-gray-300">
               {user.name}
-            </span>
+            </span> */}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="min-w-[200px]" align="end">
@@ -63,19 +64,18 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
       </DropdownMenu>
       <AlertDialog open={isOpen} onOpenChange={onChange}>
         <AlertDialogContent>
-          <form action={() => execute(undefined)}>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure to sign out?</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction asChild>
-                <Button isLoading={status === "executing"} type="submit">
-                  Continue
-                </Button>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </form>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure to sign out?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button
+              isLoading={status === "executing"}
+              onClick={() => execute(undefined)}
+            >
+              Continue
+            </Button>
+          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </>
@@ -84,12 +84,14 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
 
 export const Header = ({ user }: { user?: User }) => {
   return (
-    <>
-      <div className="flex items-center justify-between px-2 py-4">
-        <div className="flex gap-4 items-center">
-          <NextLink href="/app">Logo</NextLink>
+    <div className="border-b border-gray-800">
+      <div className="flex items-center justify-between px-2 py-4 md:container mx-auto">
+        <div className="flex gap-8 items-center">
+          <NextLink href="/app">
+            <Logo />
+          </NextLink>
           <nav>
-            <ul className="flex gap-2 items-center">
+            <ul className="flex gap-4 items-center">
               <li>
                 <Link href="/app">Explore Decks</Link>
               </li>
@@ -104,6 +106,6 @@ export const Header = ({ user }: { user?: User }) => {
           <ThemeToggle />
         </div>
       </div>
-    </>
+    </div>
   );
 };
