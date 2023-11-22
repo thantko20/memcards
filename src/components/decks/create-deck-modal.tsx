@@ -18,9 +18,7 @@ export function CreateDeckModal() {
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" leftSection={<Plus />}>
-          Add Deck
-        </Button>
+        <Button leftSection={<Plus />}>Add Deck</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
