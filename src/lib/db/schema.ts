@@ -63,14 +63,36 @@ export const decks = pgTable("decks", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow()
 });
 
-export const deckRelations = relations(decks, ({ one }) => ({
+export const deckRelations = relations(decks, ({ one, many }) => ({
   author: one(users, {
     fields: [decks.authorId],
     references: [users.id]
-  })
+  }),
+  deckLikes: many(deckLikes)
 }));
 
 export type Deck = InferSelectModel<typeof decks>;
+
+export const deckLikes = pgTable("decks_likes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  deckId: uuid("deck_id")
+    .notNull()
+    .references(() => decks.id),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id)
+});
+
+export const deckLikesRelations = relations(deckLikes, ({ one, many }) => ({
+  deck: one(decks, {
+    fields: [deckLikes.deckId],
+    references: [decks.id]
+  }),
+  user: one(users, {
+    fields: [deckLikes.userId],
+    references: [users.id]
+  })
+}));
 
 export const cards = pgTable("cards", {
   id: uuid("id").primaryKey().defaultRandom(),

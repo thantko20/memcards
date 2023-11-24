@@ -7,7 +7,7 @@ export const getCurrentUserDecks = data(
   z.object({}),
   async (_, { user }) => {
     const decks = await DecksService.getDecks({ authorId: user.id });
-    return decks;
+    return decks.map((deck) => ({ ...deck, isCurrentUserCard: true }));
   }
 );
 

@@ -1,8 +1,4 @@
-import {
-  DeckCard,
-  DecksContainer,
-  DecksContainerSkeleton
-} from "@/components/decks";
+import { DecksContainer, DecksContainerSkeleton } from "@/components/decks";
 import { CreateDeckModal } from "@/components/decks/create-deck-modal";
 import { getCurrentUserDecks } from "@/data-access/decks";
 import { Suspense } from "react";

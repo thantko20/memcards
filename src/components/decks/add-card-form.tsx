@@ -43,7 +43,7 @@ export const AddCardForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   return (
     <>
       {result.serverError ? (
-        <Alert>
+        <Alert variant="destructive">
           <AlertDescription>{result.serverError}</AlertDescription>
         </Alert>
       ) : null}

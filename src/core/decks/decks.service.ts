@@ -1,10 +1,28 @@
 import { db } from "@/lib/db";
 import { CreateDeck } from "./decks.validations";
-import { decks } from "@/lib/db/schema";
-import { SQL, and, eq, ilike } from "drizzle-orm";
+import { deckLikes, decks, users } from "@/lib/db/schema";
+import { SQL, and, eq, ilike, sql } from "drizzle-orm";
 import { BadRequestException } from "@/utils";
 
 export * as DecksService from "./decks.service";
+
+const deckSelectObject = {
+  id: decks.id,
+  name: decks.name,
+  description: decks.description,
+  authorId: decks.authorId,
+  likes: sql<number>`COUNT(${deckLikes.deckId})`.mapWith(Number),
+  author: users,
+  createdAt: decks.createdAt,
+  updatedAt: decks.updatedAt
+};
+
+const deckQuery = db
+  .select(deckSelectObject)
+  .from(decks)
+  .leftJoin(deckLikes, eq(deckLikes.deckId, decks.id))
+  .leftJoin(users, eq(users.id, decks.authorId))
+  .groupBy(decks.id, users.id);
 
 export const createDeck = async ({
   userId,
@@ -32,22 +50,12 @@ export const getDecks = async (query?: { authorId?: string }) => {
   if (authorId) {
     where.push(eq(decks.authorId, authorId));
   }
-  const result = await db.query.decks.findMany({
-    where: and(...where),
-    with: {
-      author: true
-    }
-  });
+  const result = await deckQuery.where(and(...where));
   return result;
 };
 
 export const getDeckById = async (id: string) => {
-  const result = await db.query.decks.findFirst({
-    where: eq(decks.id, id),
-    with: {
-      author: true
-    }
-  });
+  const [result] = await deckQuery.where(eq(decks.id, id));
 
   return result;
 };

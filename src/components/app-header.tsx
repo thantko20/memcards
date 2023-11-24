@@ -99,7 +99,7 @@ const NavLink = ({ href, children }: NavLinkProps) => {
 export const Header = ({ user }: { user?: User }) => {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800">
-      <div className="flex items-center justify-between px-2 py-4 md:container mx-auto">
+      <div className="flex items-center justify-between px-2 py-4 max-w-5xl mx-auto">
         <div className="flex gap-10 items-center">
           <NextLink href="/app">
             <Logo />
