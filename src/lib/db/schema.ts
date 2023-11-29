@@ -6,7 +6,8 @@ import {
   uuid,
   varchar,
   bigint,
-  pgEnum
+  pgEnum,
+  unique
 } from "drizzle-orm/pg-core";
 
 export const accountCompletenessEnum = pgEnum("account_completeness", [
@@ -73,15 +74,21 @@ export const deckRelations = relations(decks, ({ one, many }) => ({
 
 export type Deck = InferSelectModel<typeof decks>;
 
-export const deckLikes = pgTable("decks_likes", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  deckId: uuid("deck_id")
-    .notNull()
-    .references(() => decks.id),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id)
-});
+export const deckLikes = pgTable(
+  "decks_likes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    deckId: uuid("deck_id")
+      .notNull()
+      .references(() => decks.id),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id)
+  },
+  (self) => ({
+    unq1: unique().on(self.deckId, self.userId)
+  })
+);
 
 export const deckLikesRelations = relations(deckLikes, ({ one, many }) => ({
   deck: one(decks, {

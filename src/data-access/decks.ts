@@ -6,19 +6,27 @@ export const getCurrentUserDecks = data(
   true,
   z.object({}),
   async (_, { user }) => {
-    const decks = await DecksService.getDecks({ authorId: user.id });
+    const decks = await DecksService.getDecks({
+      authorId: user.id,
+      currentUserId: user.id
+    });
     return decks.map((deck) => ({ ...deck, isCurrentUserCard: true }));
   }
 );
 
-export const getPublicDecks = data(z.object({}), async () => {
-  const decks = await DecksService.getDecks();
-  return decks;
-});
+export const getPublicDecks = data(
+  "guard_or_pass",
+  z.object({}),
+  async (_, { user }) => {
+    const decks = await DecksService.getDecks({ currentUserId: user.id });
+    return decks;
+  }
+);
 
 export const getDeckById = data(
+  "guard_or_pass",
   z.object({ id: z.string().uuid() }),
-  async ({ id }) => {
-    return await DecksService.getDeckById(id);
+  async ({ id }, { user }) => {
+    return await DecksService.getDeckById({ id, currentUserId: user?.id });
   }
 );

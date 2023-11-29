@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye } from "lucide-react";
+import { Eye, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import {
@@ -11,40 +11,85 @@ import {
   CardDescription
 } from "../ui/card";
 import { DeckWithAuthor } from "./types";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useOptimisticAction } from "next-safe-action/hook";
+import { likeDeck } from "@/actions/decks.actions";
+import { cn } from "@/utils/ui";
 
-export const DeckCard = ({ deck }: { deck: DeckWithAuthor }) => {
+export const DeckCard = ({
+  deck: originalDeck,
+  showAuthorInfo = false
+}: {
+  deck: DeckWithAuthor;
+  showAuthorInfo?: boolean;
+}) => {
   const router = useRouter();
+  const { execute, result, optimisticData } = useOptimisticAction(
+    likeDeck,
+    originalDeck,
+    (state) => ({
+      ...state,
+      hasLiked: true,
+      likesCount: state.likesCount + 1
+    })
+  );
+  const deck = result.data || optimisticData;
   return (
     <Card>
       <CardHeader>
         <CardTitle className="h-[2ch]">{deck.name}</CardTitle>
-        {deck.isCurrentUserCard ? null : (
+        {deck.isCurrentUserCard && !showAuthorInfo ? null : (
           <CardDescription className="flex items-center gap-2 text-xs">
             Created by
-            <div className="flex items-center gap-1 text-sm">
+            <span className="flex items-center gap-1 text-sm">
               <Avatar className="w-6 h-6 rounded-full">
-                <AvatarImage
-                  src={
-                    deck.author.avatar ??
-                    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.mountsinai.on.ca%2Fwellbeing%2Four-team%2Fteam-images%2Fperson-placeholder%2Fimage_view_fullscreen&psig=AOvVaw3JoHATkBxzQsy_WlIZ53EY&ust=1700903737273000&source=images&cd=vfe&ved=0CBIQjRxqFwoTCOjDjKqm3IIDFQAAAAAdAAAAABAJ"
-                  }
-                />
+                <AvatarImage src={deck.author.avatar ?? undefined} />
+                <AvatarFallback>
+                  {deck.author.name
+                    .split(" ")
+                    .map((value) => value[0])
+                    .join("")
+                    .substring(0, 2)}
+                </AvatarFallback>
               </Avatar>
               {deck.author.name}
-            </div>
+            </span>
           </CardDescription>
         )}
       </CardHeader>
       <CardFooter className="mt-auto">
         <Button
           variant="default"
-          className="w-full"
           leftSection={<Eye size={16} />}
           onClick={() => router.push(`/app/decks/${deck.id}`)}
+          className="w-full"
         >
           View
         </Button>
+        <button
+          onClick={() => execute({ deckId: deck.id })}
+          aria-label={deck.hasLiked ? "unlike this deck" : "like this deck"}
+          className="flex items-center group"
+        >
+          <span className="group-hover:bg-black/5 dark:group-hover:bg-white/10 w-8 h-8 flex items-center justify-center rounded-full">
+            <Heart
+              size={16}
+              className={cn(
+                deck.hasLiked
+                  ? "fill-red-600 stroke-red-600 dark:fill-red-500 dark:stroke-red-500"
+                  : ""
+              )}
+            />
+          </span>
+          <span
+            className={cn(
+              "text-xs tabular-nums",
+              deck.hasLiked && "text-red-600 dark:text-red-500"
+            )}
+          >
+            {deck.likesCount}
+          </span>
+        </button>
       </CardFooter>
     </Card>
   );

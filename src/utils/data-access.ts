@@ -5,7 +5,7 @@ import { User } from "@/lib/db/schema";
 
 type Callback<I, D, WithGuard = false> = (
   input: I,
-  authenticated: WithGuard extends true
+  authenticated: WithGuard extends true | "guard_or_pass"
     ? { user: User; session: any }
     : undefined
 ) => Promise<D>;
@@ -14,10 +14,10 @@ export function data<
   S extends ZodTypeAny,
   Input extends z.infer<S>,
   Data extends any,
-  Guard extends true,
+  Guard extends true | "guard_or_pass",
   CB extends Callback<Input, Data, Guard>,
   ReturnedData extends Awaited<ReturnType<CB>>
->(withGuard: true, schema: S, cb: CB): (input: Input) => Promise<ReturnedData>;
+>(withGuard: Guard, schema: S, cb: CB): (input: Input) => Promise<ReturnedData>;
 
 export function data<
   S extends ZodTypeAny,
@@ -45,7 +45,10 @@ export function data<
     let schema: ZodSchema;
     let cb: CB;
 
-    if (typeof opt1 === "boolean") {
+    if (
+      typeof opt1 === "boolean" ||
+      (typeof opt1 === "string" && opt1 === "guard_or_pass")
+    ) {
       withGuard = opt1;
     } else {
       schema = opt1;
@@ -75,8 +78,14 @@ export function data<
 
     let authenticated: { user: User; session: any } | undefined;
     if (withGuard) {
-      const { user, session } = await authenticate("get", context);
-      authenticated = { user, session };
+      try {
+        const { user, session } = await authenticate("get", context);
+        authenticated = { user, session };
+      } catch (error) {
+        if (typeof opt1 === "string" && opt1 !== "guard_or_pass") {
+          throw error;
+        }
+      }
     }
 
     // @ts-ignore
