@@ -16,24 +16,29 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className="max-w-3xl mx-auto pt-8">
-      <div className="pb-12">
+      <div className="pb-4">
         <h2 className="text-5xl font-semibold">{deck.name}</h2>
         <p>{deck.description}</p>
       </div>
       <div className="flex gap-4">
         {user.id === deck.authorId && <AddCardModal />}
-        <Button variant="outline">Review the deck</Button>
+        <Button variant="outline">Study this Deck</Button>
       </div>
-      <div className="flex flex-col gap-4 mt-12">
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            className="p-4 border-2 border-gray-300 dark:border-gray-800 rounded flex items-center justify-between"
-          >
-            <h3 className="text-xl font-semibold">{card.question}</h3>
-            <p>{card.answer}</p>
-          </div>
-        ))}
+      <div className="mt-8">
+        <p className="text-2xl font-semibold">
+          {cards.length} cards in this deck
+        </p>
+        <div className="flex flex-col gap-4 mt-4">
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="p-4 border-2 border-gray-300 dark:border-gray-800 rounded flex items-center justify-between"
+            >
+              <h3 className="text-xl font-semibold">{card.question}</h3>
+              <p>{card.answer}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

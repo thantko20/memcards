@@ -8,7 +8,7 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useDisclosure } from "@/hooks";
@@ -34,9 +34,9 @@ const ProfileDropdownMenu = ({ user }: { user: User }) => {
     onError: (error) => {
       toast({
         variant: "destructive",
-        description: error.serverError ?? "Something went wrong!"
+        description: error.serverError ?? "Something went wrong!",
       });
-    }
+    },
   });
 
   return (
