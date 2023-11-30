@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-  CardDescription,
+  CardDescription
 } from "../ui/card";
 import { DeckWithAuthor } from "./types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -24,8 +24,8 @@ export const DeckCard = ({ deck: originalDeck }: { deck: DeckWithAuthor }) => {
     (state) => ({
       ...state,
       hasLiked: !state.hasLiked,
-      likesCount: state.hasLiked ? state.likesCount - 1 : state.likesCount + 1,
-    }),
+      likesCount: state.hasLiked ? state.likesCount - 1 : state.likesCount + 1
+    })
   );
   const deck = result.data || optimisticData;
   return (
@@ -66,14 +66,14 @@ export const DeckCard = ({ deck: originalDeck }: { deck: DeckWithAuthor }) => {
               className={cn(
                 deck.hasLiked
                   ? "fill-red-600 stroke-red-600 dark:fill-red-500 dark:stroke-red-500"
-                  : "",
+                  : ""
               )}
             />
           </span>
           <span
             className={cn(
               "text-xs tabular-nums",
-              deck.hasLiked && "text-red-600 dark:text-red-500",
+              deck.hasLiked && "text-red-600 dark:text-red-500"
             )}
           >
             {deck.likesCount}
