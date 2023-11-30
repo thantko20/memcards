@@ -78,7 +78,7 @@ export const DeckCard = ({ deck: originalDeck }: { deck: DeckWithAuthor }) => {
           >
             {deck.likesCount}
           </span>
-        </button>{" "}
+        </button>
         <Button
           variant="default"
           leftSection={<Eye size={16} />}

@@ -7,5 +7,5 @@ export const fetchCards = data(
   async ({ deckId }) => {
     const cards = await CardsService.getCards({ deckId });
     return cards;
-  }
+  },
 );
