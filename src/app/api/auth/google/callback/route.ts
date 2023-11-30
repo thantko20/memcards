@@ -28,34 +28,34 @@ export const GET = async (request: NextRequest) => {
         attributes: {
           email: googleUser.email,
           name: googleUser.name,
-          avatar: googleUser.picture
-        }
+          avatar: googleUser.picture,
+        },
       });
     }
 
     const session = await auth.createSession({
       userId: user.id,
-      attributes: {}
+      attributes: {},
     });
     const authRequest = auth.handleRequest(request.method, {
       cookies,
-      headers
+      headers,
     });
     authRequest.setSession(session);
     return new Response(null, {
       status: 302,
       headers: {
-        Location: "/app"
-      }
+        Location: "/app",
+      },
     });
   } catch (error) {
     if (error instanceof OAuthRequestError) {
       return new Response(null, {
-        status: 400
+        status: 400,
       });
     }
     return new Response(null, {
-      status: 500
+      status: 500,
     });
   }
 };
