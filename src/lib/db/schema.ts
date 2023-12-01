@@ -90,7 +90,7 @@ export const deckLikes = pgTable(
   })
 );
 
-export const deckLikesRelations = relations(deckLikes, ({ one, many }) => ({
+export const deckLikesRelations = relations(deckLikes, ({ one }) => ({
   deck: one(decks, {
     fields: [deckLikes.deckId],
     references: [decks.id]

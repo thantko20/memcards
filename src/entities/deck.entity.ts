@@ -1,4 +1,4 @@
-import { User } from "@/lib/db/schema";
+import { User } from "./user.entity";
 
 export class Deck {
   private id: string;
@@ -38,10 +38,10 @@ export class Deck {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.author = {
-      name: author.name,
-      username: author.username,
-      avatar: author.avatar,
-      email: author.email
+      name: author.getName(),
+      username: author.getUsername(),
+      avatar: author.getAvatar(),
+      email: author.getEmail()
     };
   }
 
