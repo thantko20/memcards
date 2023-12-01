@@ -15,7 +15,8 @@ export class User {
     password,
     createdAt,
     updatedAt,
-    username
+    username,
+    avatar
   }: {
     id: string;
     name: string;
@@ -60,13 +61,15 @@ export class User {
     return this.avatar;
   }
 
-  public toObject(safe?: boolean = true) {
+  public toObject(safe: boolean = true) {
     return {
       id: this.id,
       name: this.name,
       email: this.email,
       username: this.username,
       avatar: this.avatar,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
       ...(!safe && { password: this.password })
     };
   }
